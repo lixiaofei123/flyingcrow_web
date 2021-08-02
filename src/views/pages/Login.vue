@@ -38,7 +38,7 @@
                       >
                     </CCol>
                     <CCol col="6" class="text-right">
-                      <CButton color="link" class="px-0">忘记密码?</CButton>
+                      <!-- CButton color="link" class="px-0">忘记密码?</CButton -->
                       <CButton color="link" class="px-0" v-if="allowRegister">立即注册!</CButton>
                     </CCol>
                   </CRow>
@@ -79,7 +79,7 @@ export default {
     return {
       username: "",
       password: "",
-      allowRegister: ""
+      allowRegister: true
     };
   },
   created(){

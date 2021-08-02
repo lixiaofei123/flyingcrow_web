@@ -208,6 +208,20 @@ function login(username, password, resolve, reject) {
     .catch((err) => reject(err));
 }
 
+function register(username, email,password, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .post(`${config.url}/user/register`, {
+      name: username,
+      email: email,
+      password: password
+    })
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+
 
 function uploadFile(file, path, uploadProgress, resolve, reject) {
   uploadProgress = uploadProgress || function() {};
@@ -302,5 +316,6 @@ export {
   submitDownloadTask,
   getSetting,
   setSetting,
-  myStatinfo
+  myStatinfo,
+  register
 };

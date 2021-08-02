@@ -71,10 +71,6 @@ let admin_nav = [
             to: "/admin/setting/userupload",
           },
           {
-            name: "配额设置",
-            to: "/admin/setting/quota",
-          },
-          {
             name: "访问控制",
             to: "/admin/setting/ac",
           },

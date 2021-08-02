@@ -173,7 +173,6 @@ export default {
       roleTypes: {
         user: "普通用户",
         admin: "管理员",
-        superadmin: "超级管理员",
       },
     };
   },
@@ -182,11 +181,12 @@ export default {
     this.loadUsers(1);
     this.loadAllGroups();
     getGlobalSetting(
-      "quota",
+      "site",
       (data) => {
         if (data.code === 200) {
-          this.defaultStorageSize = data.data.defaultStorageSize;
-          this.defaultTrafficPerMonth = data.data.defaultTrafficPerMonth;
+          this.defaultStorageSize = data.data.registerConfig.storageSize;
+          this.defaultTrafficPerMonth =
+            data.data.registerConfig.trafficPerMonth;
         } else {
         }
       },
@@ -200,7 +200,7 @@ export default {
           if (data.code === 200) {
             this.groups = data.data;
           } else {
-            console.log("加载组信息失败");
+            console.error("加载组信息失败");
           }
         },
         () => {}

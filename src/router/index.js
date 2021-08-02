@@ -26,7 +26,6 @@ const UserUploadSetting = () => import("@/views/setting/UserUploadSetting");
 const SiteSetting = () => import("@/views/setting/SiteSetting");
 const OtherSetting = () => import("@/views/setting/OtherSetting")
 const ACSetting = () => import("@/views/setting/ACSetting")
-const QuotaSetting = () => import("@/views/setting/QuotaSetting")
 
 const LocalUpload = () => import("@/views/upload/LocalUpload")
 const RemoteDownload = () => import("@/views/upload/RemoteDownload")
@@ -237,10 +236,6 @@ function configRoutes() {
               path: "userupload",
               name: "传输设置",
               component: UserUploadSetting,
-            },{
-              path: "quota",
-              name: "配额设置",
-              component: QuotaSetting,
             },{
               path: "ac",
               name: "访问控制",

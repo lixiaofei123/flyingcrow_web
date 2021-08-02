@@ -148,11 +148,11 @@ export default {
     this.loadGroups(1);
     this.loadAllStorages();
     getGlobalSetting(
-      "quota",
+      "site",
       (data) => {
         if (data.code === 200) {
-          this.defaultStorageSize = data.data.defaultStorageSize;
-          this.defaultTrafficPerMonth = data.data.defaultTrafficPerMonth;
+          this.defaultStorageSize = data.data.registerConfig.storageSize;
+          this.defaultTrafficPerMonth = data.data.registerConfig.trafficPerMonth;
         } else {
         }
       },

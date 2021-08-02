@@ -1,0 +1,427 @@
+<template>
+  <div>
+    <CRow>
+      <CCol sm="12" md="12" lg="10" xl="6">
+        <CCard>
+          <CCardHeader>
+            {{ title }}
+          </CCardHeader>
+          <CCardBody>
+            <CForm>
+              <CInput
+                label="名称"
+                horizontal
+                :disabled="readonly"
+                v-model="storage.name"
+              />
+              <CRow form class="form-group">
+                <CCol sm="3">
+                  存储类型
+                </CCol>
+                <CCol sm="9">
+                  <CRow>
+                    <CCol sm="12">
+                      <select
+                        class="form-control"
+                        v-model="storage.type"
+                        style="width:100%"
+                        :disabled="readonly"
+                      >
+                        <option
+                          v-for="(value, key) in storageTypes"
+                          v-bind:key="key"
+                          :value="key"
+                          >{{ value }}</option
+                        >
+                      </select>
+                    </CCol>
+                  </CRow>
+                </CCol>
+              </CRow>
+
+              <CRow form class="form-group">
+                <CCol sm="3">
+                  读写权限
+                </CCol>
+                <CCol sm="9">
+                  <CRow>
+                    <CCol sm="12">
+                      <div class="select-box">
+                        <div
+                          class="select-item"
+                          @click="changePermission('private')"
+                          v-bind:class="{
+                            'select-item-active':
+                              storage.storagePermission === 'private',
+                          }"
+                        >
+                          私有
+                        </div>
+                        <div
+                          class="select-item"
+                          @click="changePermission('public_read')"
+                          v-bind:class="{
+                            'select-item-active':
+                              storage.storagePermission === 'public_read',
+                          }"
+                        >
+                          公共读
+                        </div>
+                        <div
+                          class="select-item"
+                          @click="changePermission('public_write_read')"
+                          v-bind:class="{
+                            'select-item-active':
+                              storage.storagePermission === 'public_write_read',
+                          }"
+                        >
+                          公共读写
+                        </div>
+                      </div>
+                    </CCol>
+                  </CRow>
+                </CCol>
+              </CRow>
+              <CRow form class="form-group">
+                <CCol tag="label" sm="3" class="col-form-label">
+                  是否激活
+                </CCol>
+                <CCol sm="9">
+                  <CSwitch
+                    class="mr-1"
+                    color="primary"
+                    :checked.sync="storage.active"
+                    :disabled="readonly"
+                  />
+                </CCol>
+              </CRow>
+              <CInput
+                label="总容量"
+                type="number"
+                append="MB"
+                horizontal
+                v-model="storage.capacity"
+                :disabled="readonly"
+              />
+              <CRow form class="form-group">
+                <CCol tag="label" sm="3" class="col-form-label">
+                  外部访问链接
+                </CCol>
+                <CCol sm="9">
+                  <CRow>
+                    <CCol
+                      sm="12"
+                      v-for="(item, index) in storage.externUrls"
+                      v-bind:key="index"
+                    >
+                      <CInput
+                        :value="item"
+                        :disabled="readonly"
+                        @input="updateExternUrls($event, index)"
+                      >
+                        <template #append>
+                          <CButton
+                            v-if="!readonly"
+                            color="danger"
+                            @click="removeExternUrl(index)"
+                            >移除</CButton
+                          >
+                        </template>
+                      </CInput>
+                    </CCol>
+                    <CCol sm="12">
+                      <CButton
+                        v-if="!readonly"
+                        size="sm"
+                        color="info"
+                        @click="addExternUrl"
+                        >增加</CButton
+                      >
+                    </CCol>
+                  </CRow>
+                </CCol>
+              </CRow>
+            </CForm>
+            <CRow form class="form-group">
+              <CCol tag="label" sm="3" class="col-form-label">
+                <CButton class="btn" color="info" size="sm" @click="goBack"
+                  >返回上一级</CButton
+                >
+              </CCol>
+              <CCol sm="6" md="4">
+                <CButton
+                  v-if="!readonly"
+                  block
+                  color="primary"
+                  size="sm"
+                  @click="submitStorage"
+                  >提交</CButton
+                >
+              </CCol>
+            </CRow>
+          </CCardBody>
+        </CCard>
+      </CCol>
+      <CCol sm="12" md="12" lg="10" xl="6" v-if="storage.type">
+        <CCard>
+          <CCardHeader>
+            {{ storagetitle }}
+          </CCardHeader>
+          <CCardBody>
+            <CForm v-if="storage.type === 'alioss'">
+              <CInput
+                label="Endpoint"
+                horizontal
+                v-model="storage.config.endpoint"
+                :disabled="readonly"
+              />
+              <CInput
+                label="Bucket 名称"
+                horizontal
+                v-model="storage.config.bucketName"
+                :disabled="readonly"
+              />
+              <CInput
+                label="accessKeyId"
+                horizontal
+                v-model="storage.config.accesskeyId"
+                :disabled="readonly"
+              />
+              <CInput
+                label="accessKeySecret"
+                horizontal
+                v-model="storage.config.accessKeySecret"
+                :disabled="readonly"
+              />
+              <CInput
+                label="前缀"
+                horizontal
+                v-model="storage.config.prefix"
+                :disabled="readonly"
+              />
+            </CForm>
+            <CForm v-if="storage.type === 'qqcos'">
+              <CInput
+                label="bucketURL"
+                horizontal
+                v-model="storage.config.bucketURL"
+                :disabled="readonly"
+              />
+              <CInput
+                label="serviceURL"
+                horizontal
+                v-model="storage.config.serviceURL"
+                :disabled="readonly"
+              />
+              <CInput
+                label="secretID"
+                horizontal
+                v-model="storage.config.secretID"
+                :disabled="readonly"
+              />
+              <CInput
+                label="secretKey"
+                horizontal
+                v-model="storage.config.secretKey"
+                :disabled="readonly"
+              />
+              <CInput
+                label="前缀"
+                horizontal
+                v-model="storage.config.prefix"
+                :disabled="readonly"
+              />
+            </CForm>
+            <CForm v-if="storage.type === 'fs'">
+              <CInput
+                label="主目录"
+                horizontal
+                v-model="storage.config.root"
+                :disabled="readonly"
+              />
+            </CForm>
+          </CCardBody>
+        </CCard>
+      </CCol>
+    </CRow>
+  </div>
+</template>
+
+<script>
+import { findStorageById, newStorage, updateStorage } from "../../api/api";
+import { deepCopy } from "../../utils/utils";
+
+export default {
+  name: "EditStorage",
+  components: {},
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.usersOpened = from.fullPath.includes("storages");
+    });
+  },
+  data() {
+    return {
+      storageTypes: {
+        alioss: "阿里云OSS",
+        fs: "文件系统",
+        qqcos: "腾讯云COS",
+      },
+      readonly: false,
+      storage: {
+        name: "",
+        type: "fs",
+        active: true,
+        default: false,
+        externUrls: [],
+        capacity: 0,
+        storagePermission: "private",
+        config: {},
+      },
+    };
+  },
+  created: function() {
+    this.sid = this.$route.params.id;
+    let path = this.$route.path;
+    if (path.indexOf("/storages/show/") === 0) {
+      this.readonly = true;
+    }
+    if (this.sid > 0) {
+      this.resetStorage();
+    }
+  },
+  methods: {
+    resetStorage() {
+      findStorageById(
+        this.sid,
+        (data) => {
+          if (data.code === 200) {
+            this.storage = data.data;
+            this.storage.externUrls = data.data.config.externUrls;
+          }
+        },
+        data => {
+          this.$notify.error({
+              title: "错误",
+              message: `获取存储信息，原因${data.reason}`,
+            });
+        }
+      );
+    },
+    changePermission: function(permission) {
+      if (!this.readonly) {
+        this.storage.storagePermission = permission;
+      }
+    },
+    addExternUrl: function() {
+      this.storage.externUrls = this.storage.externUrls || [];
+      this.storage.externUrls.push("");
+    },
+    removeExternUrl: function(index) {
+      this.storage.externUrls.splice(index, 1);
+    },
+    updateExternUrls: function(event, index) {
+      this.storage.externUrls[index] = event;
+    },
+    goBack() {
+      this.usersOpened
+        ? this.$router.go(-1)
+        : this.$router.push({ path: "/admin/storages" });
+    },
+    submitStorage() {
+      this.storage.capacity = parseInt(this.storage.capacity);
+
+      if (this.sid <= 0) {
+        newStorage(
+          deepCopy(this.storage),
+          (data) => {
+            if (data.code === 200) {
+              this.$notify({
+                title: "成功",
+                message: `新增存储【${data.data.name}】成功`,
+                type: "success",
+              });
+            } 
+          },
+          data => {
+            this.$notify.error({
+                title: "错误",
+                message: `新增存储【${this.storage.name}】失败，原因${data.reason}`,
+              });
+          }
+        );
+      } else {
+        updateStorage(
+          this.sid,
+          deepCopy(this.storage),
+          (data) => {
+            if (data.code === 200) {
+              this.$notify({
+                title: "成功",
+                message: `更新存储【${data.data.name}】成功`,
+                type: "success",
+              });
+            } 
+          },
+          data => {
+            this.$notify.error({
+                title: "错误",
+                message: `更新存储【${this.storage.name}】失败，原因${data.reason}`,
+              });
+          }
+        );
+      }
+    },
+  },
+  computed: {
+    storagetitle: function() {
+      if (this.storage.type === "alioss") {
+        return "配置阿里云OSS";
+      }
+      if (this.storage.type === "fs") {
+        return "配置存储目录";
+      }
+      if (this.storage.type === "qqcos") {
+        return "配置腾讯云COS";
+      }
+    },
+    title: function() {
+      if (this.sid <= 0) {
+        return "添加新的存储";
+      } else {
+        return "编辑数据存储";
+      }
+    },
+  },
+};
+</script>
+
+<style scoped>
+.container {
+  height: 200px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  text-align: center;
+}
+.select-box {
+  display: flex;
+}
+.select-item {
+  padding: 5px 15px;
+  border: 1px solid #737373;
+  background-color: #fff;
+  color: #555;
+  transition: all 0.3s ease 0s;
+  margin-right: 15px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.select-item:hover {
+  border: 1px solid #000;
+  color: #111;
+}
+.select-item-active {
+  border: 1px solid rgb(50, 31, 219);
+  color: white;
+  background: rgb(50, 31, 219);
+}
+</style>

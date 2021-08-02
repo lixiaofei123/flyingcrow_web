@@ -27,39 +27,37 @@
       <img name="logo" height="40" alt="Logo" src="img/logo_main.png" />
     </CHeaderBrand>
     <CHeaderNav class="mr-4">
+      <CHeaderNavItem class="d-md-down-none mx-2" >
+        <CHeaderNavLink>
+          {{ user.nickName || user.name }}
+        </CHeaderNavLink>
+      </CHeaderNavItem>
       <TheHeaderDropdownAccnt :user="user" :stat="stat" @logout="logout" />
     </CHeaderNav>
   </CHeader>
 </template>
 
 <script>
-import { myInfo } from "../api/api";
 var cookies = require("vue-cookie");
 import TheHeaderDropdownAccnt from "./TheHeaderDropdownAccnt";
 
 export default {
   name: "TheHeader",
-  data() {
-    return {
-      user: {},
-      stat: {},
-    };
+  props: {
+    stat: Object,
   },
-  created() {
-    this.loadInfo();
+  data() {
+    return {};
+  },
+  created() {},
+  computed: {
+    user: function() {
+      return this.$store.state.user;
+    },
   },
   methods: {
-    loadInfo() {
-      myInfo((data) => {
-        if (data.code === 200) {
-          this.user = data.data.user;
-          this.stat = data.data.stat;
-        }
-      });
-    },
     logout() {
       cookies.set("authorization", "");
-      this.user = {};
       this.stat = {};
       window.location = "#/index";
     },

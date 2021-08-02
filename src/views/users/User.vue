@@ -159,7 +159,7 @@
 </template>
 
 <script>
-import { findUserById, userStatinfo } from "../../api/api";
+import { findUserById, userStatinfo } from "../../api/adminapi";
 import { wellSize } from "../../utils/utils";
 export default {
   name: "User",

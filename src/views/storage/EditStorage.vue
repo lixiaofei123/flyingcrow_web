@@ -248,7 +248,7 @@
 </template>
 
 <script>
-import { findStorageById, newStorage, updateStorage } from "../../api/api";
+import { findStorageById, newStorage, updateStorage } from "../../api/adminapi";
 import { deepCopy } from "../../utils/utils";
 
 export default {

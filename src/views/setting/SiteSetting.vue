@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { getSetting, setSetting } from "../../api/api";
+import { getGlobalSetting, setGlobalSetting } from "../../api/adminapi";
 
 export default {
   name: "SiteSetting",
@@ -65,7 +65,7 @@ export default {
     };
   },
   created: function() {
-    getSetting(
+    getGlobalSetting(
       "site",
       (data) => {
         if (data.code === 200) {
@@ -82,7 +82,7 @@ export default {
   },
   methods: {
     saveSetting() {
-      setSetting(
+      setGlobalSetting(
         "site",
         this.setting,
         (data) => {

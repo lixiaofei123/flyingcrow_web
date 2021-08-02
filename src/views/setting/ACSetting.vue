@@ -125,7 +125,6 @@
                   append="MB"
                   horizontal
                   v-model="setting.trafficPerDayPerIP"
-                  :disabled="readonly"
                 /><CRow form class="form-group">
                   <CCol sm="3">
                     超限策略

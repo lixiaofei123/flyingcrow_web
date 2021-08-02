@@ -91,7 +91,7 @@
 
 <script>
 import HelpTips from "../base/HelpTips.vue";
-import { getSetting, setSetting } from "../../api/api";
+import { getGlobalSetting, setGlobalSetting } from "../../api/adminapi";
 
 export default {
   name: "SiteUploadSetting",
@@ -111,7 +111,7 @@ export default {
     };
   },
   created: function() {
-    getSetting(
+    getGlobalSetting(
       "siteupload",
       (data) => {
         if (data.code === 200) {
@@ -129,7 +129,7 @@ export default {
   methods: {
     saveSetting() {
       this.setting.maxFileSize = parseInt(this.setting.maxFileSize);
-      setSetting(
+      setGlobalSetting(
         "siteupload",
         this.setting,
         (data) => {

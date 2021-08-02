@@ -1,8 +1,8 @@
 <template>
   <div class="c-app">
-    <TheSidebar/>
+    <TheSidebar />
     <CWrapper>
-      <TheHeader/>
+      <TheHeader :stat="stat" />
       <div class="c-body">
         <main class="c-main">
           <CContainer fluid>
@@ -12,24 +12,45 @@
           </CContainer>
         </main>
       </div>
-      <TheFooter/>
+      <TheFooter />
     </CWrapper>
   </div>
 </template>
 
 <script>
-import TheSidebar from './TheSidebar'
-import TheHeader from './TheHeader'
-import TheFooter from './TheFooter'
+import { myInfo } from "../api/api";
+import TheSidebar from "./TheSidebar";
+import TheHeader from "./TheHeader";
+import TheFooter from "./TheFooter";
 
 export default {
-  name: 'TheContainer',
+  name: "TheContainer",
   components: {
     TheSidebar,
     TheHeader,
-    TheFooter
-  }
-}
+    TheFooter,
+  },
+  data() {
+    return {
+      user: {},
+      stat: {},
+    };
+  },
+  created() {
+    this.loadInfo();
+  },
+  methods: {
+    loadInfo() {
+      myInfo((data) => {
+        if (data.code === 200) {
+          this.user = data.data.user;
+          this.stat = data.data.stat;
+          this.$store.commit('setUserInfo',this.user)
+        }
+      });
+    },
+  },
+};
 </script>
 
 <style scoped>

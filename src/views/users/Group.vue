@@ -112,7 +112,7 @@ import {
   deleteUserFromGroup,
   findFreeUser,
   addUserToGroup,
-} from "../../api/api";
+} from "../../api/adminapi";
 import GroupUserTable from "./GroupUserTable.vue";
 
 export default {

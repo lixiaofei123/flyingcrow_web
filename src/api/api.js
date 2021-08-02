@@ -57,97 +57,6 @@ function siteInfo(resolve, reject) {
     });
 }
 
-function storageList(page, limit, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .get(`${config.url}/api/storage?page=${page}&limit=${limit}`)
-    .then((resp) => resolve(resp.data))
-    .catch(() => {
-      reject();
-    });
-}
-
-function allStorageList(resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .get(`${config.url}/api/storage/all`)
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function findStorageById(sid, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .get(`${config.url}/api/storage/${sid}`)
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function newStorage(storage, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  storage.config.externUrls = storage.externUrls;
-  storage.externUrls = null;
-  axios
-    .post(`${config.url}/api/storage`, storage)
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function updateStorage(sid, storage, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  storage.config.externUrls = storage.externUrls;
-  storage.externUrls = null;
-  axios
-    .put(`${config.url}/api/storage/${sid}`, storage)
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function deleteStorage(sid, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .delete(`${config.url}/api/storage/${sid}`)
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function activeStorage(sid, active, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  var bodyFormData = new FormData();
-  bodyFormData.append("active", active);
-  axios
-    .post(`${config.url}/api/storage/active/${sid}`, bodyFormData)
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function defaultStorage(sid, setDefault, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  var bodyFormData = new FormData();
-  bodyFormData.append("default", setDefault);
-  axios
-    .post(`${config.url}/api/storage/default/${sid}`, bodyFormData)
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function userList(query, page, limit, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .get(`${config.url}/api/user?query=${query}&page=${page}&limit=${limit}`)
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
 function myInfo(resolve, reject) {
   resolve = resolve || function() {};
   reject = reject || function() {};
@@ -156,6 +65,18 @@ function myInfo(resolve, reject) {
     .then((resp) => resolve(resp.data))
     .catch((err) => reject(err));
 }
+
+function myStatinfo(time, beginTime, endTime, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(
+      `${config.url}/api/stat/?time=${time}&beginTime=${beginTime}&endTime=${endTime}`
+    )
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
 
 function updateMyInfo(user, resolve, reject) {
   resolve = resolve || function() {};
@@ -168,181 +89,6 @@ function updateMyInfo(user, resolve, reject) {
       password: user.password,
       nickName: user.nickName
     })
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function findUserById(userId, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .get(`${config.url}/api/user/${userId}`)
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function newUser(user, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .post(`${config.url}/api/user`, {
-      name: user.name,
-      email: user.email,
-      role: user.role,
-      password: user.password,
-      storageQuota: parseInt(user.storageQuota),
-      trafficQuota: parseInt(user.trafficQuota),
-      groupId: user.groupId,
-    })
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function updateUser(userId, newuser, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .put(`${config.url}/api/user/${userId}`, {
-      email: newuser.email,
-      role: newuser.role,
-      password: newuser.password,
-      storageQuota: parseInt(newuser.storageQuota),
-      trafficQuota: parseInt(newuser.trafficQuota),
-      groupId: newuser.groupId,
-    })
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function deleteUser(uid, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .delete(`${config.url}/api/user/${uid}`)
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function enableUser(userId, enable, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  var bodyFormData = new FormData();
-  bodyFormData.append("userId", userId);
-  bodyFormData.append("enable", enable);
-  axios
-    .post(`${config.url}/api/user/enable`, bodyFormData)
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function groupList(query, page, limit, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .get(`${config.url}/api/group?query=${query}&page=${page}&limit=${limit}`)
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function groupUserList(gid, query, page, limit, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .get(
-      `${config.url}/api/group/users/${gid}?query=${query}&page=${page}&limit=${limit}`
-    )
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function groupAll(resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .get(`${config.url}/api/group/all`)
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function findGroupById(groupId, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .get(`${config.url}/api/group/${groupId}`)
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function findFreeUser(query, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .get(`${config.url}/api/group/freeuser?query=${query}`)
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function deleteGroup(groupId, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .delete(`${config.url}/api/group/${groupId}`)
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function newGroup(group, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .post(`${config.url}/api/group`, {
-      name: group.name,
-      storageQuota: parseInt(group.storageQuota),
-      trafficQuota: parseInt(group.trafficQuota),
-      groupStorages: [
-        {
-          storageId: group.storageId,
-          allowUseExternUrl: group.allowUseExternUrl,
-        },
-      ],
-    })
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function updateGroup(groupId, group, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .put(`${config.url}/api/group/${groupId}`, {
-      name: group.name,
-      storageQuota: parseInt(group.storageQuota),
-      trafficQuota: parseInt(group.trafficQuota),
-      groupStorages: [
-        {
-          storageId: group.storageId,
-          allowUseExternUrl: group.allowUseExternUrl,
-        },
-      ],
-    })
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function addUserToGroup(gid, uid, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .post(`${config.url}/api/group/user/${gid}/${uid}`)
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function deleteUserFromGroup(gid, uid, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .delete(`${config.url}/api/group/user/${gid}/${uid}`)
     .then((resp) => resolve(resp.data))
     .catch((err) => reject(err));
 }
@@ -450,24 +196,6 @@ function deleteFile(fileId, resolve, reject) {
     .catch((err) => reject(err));
 }
 
-function getSetting(type, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .get(`${config.url}/api/setting/${type}`)
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function setSetting(type, setting, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .put(`${config.url}/api/setting/${type}`, setting)
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
 function login(username, password, resolve, reject) {
   resolve = resolve || function() {};
   reject = reject || function() {};
@@ -480,27 +208,6 @@ function login(username, password, resolve, reject) {
     .catch((err) => reject(err));
 }
 
-function userStatinfo(userId, time, beginTime, endTime, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .get(
-      `${config.url}/api/stat/${userId}?time=${time}&beginTime=${beginTime}&endTime=${endTime}`
-    )
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
-
-function totalStatinfo(time, beginTime, endTime, resolve, reject) {
-  resolve = resolve || function() {};
-  reject = reject || function() {};
-  axios
-    .get(
-      `${config.url}/api/stat?time=${time}&beginTime=${beginTime}&endTime=${endTime}`
-    )
-    .then((resp) => resolve(resp.data))
-    .catch((err) => reject(err));
-}
 
 function uploadFile(file, path, uploadProgress, resolve, reject) {
   uploadProgress = uploadProgress || function() {};
@@ -556,35 +263,28 @@ function submitDownloadTask(url, resolve, reject) {
     .catch((err) => reject(err));
 }
 
+function getSetting(type, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(`${config.url}/api/setting/${type}`)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function setSetting(type, setting, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .put(`${config.url}/api/setting/${type}`, setting)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
 
 export {
   siteInfo,
-  storageList,
-  findStorageById,
-  newStorage,
-  updateStorage,
-  deleteStorage,
-  activeStorage,
-  defaultStorage,
-  allStorageList,
-  userList,
   myInfo,
   updateMyInfo,
-  findUserById,
-  findFreeUser,
-  newUser,
-  updateUser,
-  deleteUser,
-  enableUser,
-  groupList,
-  groupUserList,
-  groupAll,
-  findGroupById,
-  deleteGroup,
-  newGroup,
-  updateGroup,
-  addUserToGroup,
-  deleteUserFromGroup,
   tokenList,
   findTokenById,
   newToken,
@@ -595,13 +295,12 @@ export {
   mkDir,
   fileInfo,
   deleteFile,
-  getSetting,
-  setSetting,
   login,
-  userStatinfo,
-  totalStatinfo,
   uploadFile,
   downloadTaskList,
   getDownloadTaskByUUID,
-  submitDownloadTask
+  submitDownloadTask,
+  getSetting,
+  setSetting,
+  myStatinfo
 };

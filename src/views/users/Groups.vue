@@ -114,9 +114,9 @@ import {
   newGroup,
   updateGroup,
   deleteGroup,
-  getSetting,
+  getGlobalSetting,
   allStorageList,
-} from "../../api/api";
+} from "../../api/adminapi";
 export default {
   name: "Groups",
   components: {
@@ -147,7 +147,7 @@ export default {
   created: function() {
     this.loadGroups(1);
     this.loadAllStorages();
-    getSetting(
+    getGlobalSetting(
       "quota",
       (data) => {
         if (data.code === 200) {

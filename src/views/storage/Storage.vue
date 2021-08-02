@@ -44,7 +44,7 @@ import {
   findStorageById,
   activeStorage,
   defaultStorage,
-} from "../../api/api";
+} from "../../api/adminapi";
 import { wellSize } from "../../utils/utils.js";
 export default {
   name: "Storage",

@@ -1,4 +1,4 @@
-export default [
+let admin_nav = [
   {
     _name: "CSidebarNav",
     _children: [
@@ -93,7 +93,73 @@ export default [
         name: "个人资料",
         to: "/admin/me",
         icon: "cil-speedometer",
-      }
+      },
     ],
   },
 ];
+
+let user_nav = [
+  {
+    _name: "CSidebarNav",
+    _children: [
+      {
+        _name: "CSidebarNavItem",
+        name: "主面板",
+        to: "/admin/dashboard",
+        icon: "cil-speedometer",
+      },
+      {
+        _name: "CSidebarNavItem",
+        name: "文件管理",
+        to: "/admin/files",
+        icon: "cil-speedometer",
+      },
+      {
+        _name: "CSidebarNavDropdown",
+        name: "上传",
+        route: "/admin/upload",
+        icon: "cil-puzzle",
+        items: [
+          {
+            name: "本地上传",
+            to: "/admin/upload/local",
+          },
+          {
+            name: "远程下载",
+            to: "/admin/upload/remote",
+          },
+        ],
+      },
+      {
+        _name: "CSidebarNavItem",
+        name: "授权码",
+        to: "/admin/users/tokens",
+        icon: "cil-speedometer",
+      },
+      {
+        _name: "CSidebarNavDropdown",
+        name: "设置",
+        route: "/admin/setting",
+        icon: "cil-puzzle",
+        items: [
+          {
+            name: "上传设置",
+            to: "/admin/setting/userupload",
+          },
+          {
+            name: "访问控制",
+            to: "/admin/setting/ac",
+          },
+        ],
+      },
+      {
+        _name: "CSidebarNavItem",
+        name: "个人资料",
+        to: "/admin/me",
+        icon: "cil-speedometer",
+      },
+    ],
+  },
+];
+
+export { admin_nav, user_nav };

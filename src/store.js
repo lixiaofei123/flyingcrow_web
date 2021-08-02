@@ -4,7 +4,8 @@ Vue.use(Vuex)
 
 const state = {
   sidebarShow: 'responsive',
-  sidebarMinimize: false
+  sidebarMinimize: false,
+  user: {}
 }
 
 const mutations = {
@@ -15,6 +16,9 @@ const mutations = {
   toggleSidebarMobile (state) {
     const sidebarClosed = [false, 'responsive'].includes(state.sidebarShow)
     state.sidebarShow = sidebarClosed ? true : 'responsive'
+  },
+  setUserInfo(state,user){
+    state.user = user
   },
   set (state, [variable, value]) {
     state[variable] = value

@@ -86,7 +86,9 @@
 
 <script>
 import { CChartLineSimple, CChartBarSimple } from "./charts/index.js";
-import { totalStatinfo } from "../api/api";
+import { totalStatinfo } from "../api/adminapi";
+import { myStatinfo } from "../api/api";
+
 import { wellSize } from "../utils/utils";
 
 export default {
@@ -103,30 +105,60 @@ export default {
     };
   },
   created() {
-    this.loadStat();
+    
+  },
+  computed: {
+    user: function() {
+      return this.$store.state.user;
+    },
+  },
+  watch:{
+    user:function(){
+      this.loadStat();
+    }
   },
   methods: {
     wellSize0(size) {
       return wellSize(size);
     },
     loadStat() {
-      totalStatinfo(
-        "month",
-        "",
-        "",
-        (data) => {
-          if (data.code === 200) {
-            this.stat = data.data;
-          } else {
+      if (this.user.role === "admin" || this.user.role === "superadmin") {
+        totalStatinfo(
+          "month",
+          "",
+          "",
+          (data) => {
+            if (data.code === 200) {
+              this.stat = data.data;
+            } else {
+            }
+          },
+          (data) => {
+            this.$notify.error({
+              title: "错误",
+              message: `获取统计信息失败，原因${data.reason}`,
+            });
           }
-        },
-        (data) => {
-          this.$notify.error({
-            title: "错误",
-            message: `获取统计信息失败，原因${data.reason}`,
-          });
-        }
-      );
+        );
+      } else {
+        myStatinfo(
+          "month",
+          "",
+          "",
+          (data) => {
+            if (data.code === 200) {
+              this.stat = data.data;
+            } else {
+            }
+          },
+          (data) => {
+            this.$notify.error({
+              title: "错误",
+              message: `获取统计信息失败，原因${data.reason}`,
+            });
+          }
+        );
+      }
     },
   },
 };

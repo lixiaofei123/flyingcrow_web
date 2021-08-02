@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { getSetting, setSetting } from "../../api/api";
+import { getGlobalSetting, setGlobalSetting } from "../../api/adminapi";
 
 export default {
   name: "OtherSetting",
@@ -57,7 +57,7 @@ export default {
     };
   },
   created: function() {
-    getSetting(
+    getGlobalSetting(
       "quota",
       (data) => {
         if (data.code === 200) {
@@ -80,7 +80,7 @@ export default {
       this.setting.defaultTrafficPerMonth = parseInt(
         this.setting.defaultTrafficPerMonth
       );
-      setSetting(
+      setGlobalSetting(
         "quota",
         this.setting,
         (data) => {

@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { getSetting } from "../../api/api";
+import { siteInfo } from "../../api/api";
 var cookies = require("vue-cookie");
 import FileDetailDrawer from "../components/FileDetailDrawer";
 
@@ -97,12 +97,11 @@ export default {
   },
   created() {
     this.uploadAction = `${window.globalConfig.url}/file/upload`;
-    getSetting(
-      "siteupload",
+    siteInfo(
       (data) => {
         if (data.code === 200) {
-          this.allowFileExtension = data.data.allowFileExtension;
-          this.maxFileSize = data.data.maxFileSize;
+           this.allowFileExtension = data.data.upload.allowFileExtension;
+            this.maxFileSize = data.data.upload.maxFileSize;
         }
       },
       (data) => {

@@ -141,9 +141,9 @@ import {
   updateUser,
   deleteUser,
   enableUser,
-  getSetting,
+  getGlobalSetting,
   groupAll,
-} from "../../api/api";
+} from "../../api/adminapi";
 export default {
   name: "Users",
   components: {
@@ -181,7 +181,7 @@ export default {
   created: function() {
     this.loadUsers(1);
     this.loadAllGroups();
-    getSetting(
+    getGlobalSetting(
       "quota",
       (data) => {
         if (data.code === 200) {

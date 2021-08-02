@@ -69,7 +69,7 @@
               >
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">
-                  将文件拖到此处，或<em>点击上传</em>
+                  将文件拖到此处，或<em>点击上传</em>，或者直接试试CTRL+V粘贴吧
                 </div>
                 <div class="el-upload__tip" slot="tip">
                   {{
@@ -138,7 +138,7 @@
 </template>
 
 <script>
-import { siteInfo, myInfo } from "../../api/api";
+import { siteInfo, myInfo, uploadNoNameFile } from "../../api/api";
 var cookies = require("vue-cookie");
 import FileDetailDrawer from "../components/FileDetailDrawer";
 import TheHeaderDropdownAccnt from "../../containers/TheHeaderDropdownAccnt";
@@ -173,6 +173,56 @@ export default {
   created() {
     this.uploadAction = `${window.globalConfig.url}/file/upload`;
     this.loadInfo();
+    document.addEventListener("paste", (event) => {
+      var items = event.clipboardData && event.clipboardData.items;
+      var file = null;
+      if (items && items.length) {
+        // 检索剪切板items
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].type.indexOf("image") !== -1) {
+            file = items[i].getAsFile();
+
+            let reader = new FileReader();
+            reader.onload = (event) => {
+              let base64Str = event.target.result;
+              let uid = new Date().getTime();
+              let fileName = uid;
+              let fileItem = {
+                uid: uid,
+                name: fileName,
+                base64: base64Str,
+                size: file.size,
+                percentage: 0,
+              };
+              this.fileChanged(fileItem);
+              uploadNoNameFile(
+                file,
+                (progress) => {
+                  fileItem.percentage = progress;
+                  this.fileUpload("",fileItem);
+                },
+                (data) => {
+                  fileItem.percentage = 100;
+                  this.uploadSuccess(data, fileItem);
+                },
+                (data) => {
+                  let error = {
+                    message: JSON.stringify(data),
+                  };
+                  this.uploadError(error, fileItem);
+                }
+              );
+            };
+            reader.readAsDataURL(file);
+
+            break;
+          }
+        }
+      }
+    });
+  },
+  destroyed() {
+    document.removeEventListener("paste");
   },
   methods: {
     loadInfo() {
@@ -217,7 +267,7 @@ export default {
         this.uploads.unshift({
           name: file.name,
           percentage: file.percentage,
-          url: URL.createObjectURL(file.raw),
+          url: file.raw ? URL.createObjectURL(file.raw) : file.base64,
           size: file.size,
           status: "",
           uid: file.uid,

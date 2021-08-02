@@ -77,7 +77,6 @@ function myStatinfo(time, beginTime, endTime, resolve, reject) {
     .catch((err) => reject(err));
 }
 
-
 function updateMyInfo(user, resolve, reject) {
   resolve = resolve || function() {};
   reject = reject || function() {};
@@ -87,7 +86,7 @@ function updateMyInfo(user, resolve, reject) {
       avatar: user.avatar,
       mood: user.mood,
       password: user.password,
-      nickName: user.nickName
+      nickName: user.nickName,
     })
     .then((resp) => resolve(resp.data))
     .catch((err) => reject(err));
@@ -186,7 +185,6 @@ function fileInfoById(fileId, resolve, reject) {
     .catch((err) => reject(err));
 }
 
-
 function deleteFile(fileId, resolve, reject) {
   resolve = resolve || function() {};
   reject = reject || function() {};
@@ -208,20 +206,18 @@ function login(username, password, resolve, reject) {
     .catch((err) => reject(err));
 }
 
-function register(username, email,password, resolve, reject) {
+function register(username, email, password, resolve, reject) {
   resolve = resolve || function() {};
   reject = reject || function() {};
   axios
     .post(`${config.url}/user/register`, {
       name: username,
       email: email,
-      password: password
+      password: password,
     })
     .then((resp) => resolve(resp.data))
     .catch((err) => reject(err));
 }
-
-
 
 function uploadFile(file, path, uploadProgress, resolve, reject) {
   uploadProgress = uploadProgress || function() {};
@@ -231,6 +227,33 @@ function uploadFile(file, path, uploadProgress, resolve, reject) {
   formData.append("file", file);
   formData.append("path", path);
   formData.append("changeName", "false");
+
+  axios
+    .post(`${config.url}/file/upload`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Accept: "*/*",
+      },
+      onUploadProgress: (progressEvent) => {
+        var percentCompleted = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
+        uploadProgress(percentCompleted);
+      },
+    })
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function uploadNoNameFile(file, uploadProgress, resolve, reject) {
+  uploadProgress = uploadProgress || function() {};
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  var formData = new FormData();
+  formData.append("file", file);
+  formData.append("noname", "true");
+  formData.append("changeName", "false");
+
   axios
     .post(`${config.url}/file/upload`, formData, {
       headers: {
@@ -257,7 +280,7 @@ function downloadTaskList(page, limit, resolve, reject) {
     .catch((err) => reject(err));
 }
 
-function getDownloadTaskByUUID( uuid, resolve, reject) {
+function getDownloadTaskByUUID(uuid, resolve, reject) {
   resolve = resolve || function() {};
   reject = reject || function() {};
   axios
@@ -272,7 +295,7 @@ function submitDownloadTask(url, resolve, reject) {
   var formData = new FormData();
   formData.append("url", url);
   axios
-    .post(`${config.url}/api/download`,formData)
+    .post(`${config.url}/api/download`, formData)
     .then((resp) => resolve(resp.data))
     .catch((err) => reject(err));
 }
@@ -311,11 +334,12 @@ export {
   deleteFile,
   login,
   uploadFile,
+  uploadNoNameFile,
   downloadTaskList,
   getDownloadTaskByUUID,
   submitDownloadTask,
   getSetting,
   setSetting,
   myStatinfo,
-  register
+  register,
 };

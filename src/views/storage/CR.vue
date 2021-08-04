@@ -37,7 +37,7 @@
 
 <script>
 import CRTable from "./CRTable.vue";
-import { CRList, deleteCR, findCRById, defaultCR } from "../../api/adminapi";
+import { CRList, deleteCR, findCRById, defaultCR,allCRTypes } from "../../api/adminapi";
 export default {
   name: "CR",
   components: {
@@ -50,8 +50,6 @@ export default {
       limit: 5,
       total: 0,
       crTypes: {
-        aliyun: "阿里云盾-内容安全",
-        qqcloud: "腾讯数据万象-图片审核",
       },
       levels: {
         block: "敏感",
@@ -67,7 +65,18 @@ export default {
     };
   },
   created: function() {
-    this.loadCRs(1);
+    allCRTypes(data=>{
+      for(let stype in data.data){
+          this.crTypes[stype] = data.data[stype].name
+        }
+      this.loadCRs(1);
+    },data=>{
+      this.$notify.error({
+          title: "错误",
+          message: `加载图片审核策略类型失败，原因${data.reason}`,
+        });
+    })
+    
   },
   methods: {
     loadCRs(page) {

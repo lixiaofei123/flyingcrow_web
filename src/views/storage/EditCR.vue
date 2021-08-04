@@ -142,49 +142,13 @@
             {{ crtitle }}
           </CCardHeader>
           <CCardBody>
-            <CForm v-if="cr.type === 'aliyun'">
+            <CForm v-if="cr.type">
               <CInput
-                label="Endpoint"
+                v-for="item in properties"
+                v-bind:key="item.name"
+                :label="item.showName"
                 horizontal
-                v-model="cr.config.endpoint"
-                :disabled="readonly"
-              />
-              <CInput
-                label="accessKeyId"
-                horizontal
-                v-model="cr.config.accessKeyId"
-                :disabled="readonly"
-              />
-              <CInput
-                label="accessKeySecret"
-                horizontal
-                v-model="cr.config.accessKeySecret"
-                :disabled="readonly"
-              />
-            </CForm>
-            <CForm v-if="cr.type === 'qqcloud'">
-              <CInput
-                label="BucketName"
-                horizontal
-                v-model="cr.config.bucketName"
-                :disabled="readonly"
-              />
-              <CInput
-                label="Region"
-                horizontal
-                v-model="cr.config.region"
-                :disabled="readonly"
-              />
-              <CInput
-                label="secretID"
-                horizontal
-                v-model="cr.config.secretID"
-                :disabled="readonly"
-              />
-              <CInput
-                label="secretKey"
-                horizontal
-                v-model="cr.config.secretKey"
+                v-model="cr.config[item.name]"
                 :disabled="readonly"
               />
             </CForm>
@@ -196,7 +160,7 @@
 </template>
 
 <script>
-import { findCRById, newCR, updateCR } from "../../api/adminapi";
+import { findCRById, newCR, updateCR,allCRTypes  } from "../../api/adminapi";
 import { deepCopy } from "../../utils/utils";
 
 export default {
@@ -227,6 +191,7 @@ export default {
         Suspected: "疑似敏感",
         normal: "正常",
       },
+      crProps: {},
     };
   },
   created: function() {
@@ -235,9 +200,24 @@ export default {
     if (path.indexOf("/crs/show/") !== -1) {
       this.readonly = true;
     }
-    if (this.sid > 0) {
-      this.resetCR();
-    }
+
+    allCRTypes(
+      (data) => {
+        for (let stype in data.data) {
+          this.crTypes[stype] = data.data[stype].name;
+        }
+        this.crProps = data.data;
+        if (this.sid > 0) {
+          this.resetCR();
+        }
+      },
+      (data) => {
+        this.$notify.error({
+          title: "错误",
+          message: `加载图片审核策略类型失败，原因${data.reason}`,
+        });
+      }
+    );
   },
   methods: {
     resetCR() {
@@ -330,12 +310,7 @@ export default {
       return this.cr.detectTypes.findIndex((t) => t === "ads") !== -1;
     },
     crtitle: function() {
-      if (this.cr.type === "aliyun") {
-        return "配置阿里云盾";
-      }
-      if (this.cr.type === "qqcloud") {
-        return "配置腾讯云数据万象";
-      }
+      return this.crTypes[this.cr.type];
     },
     title: function() {
       if (this.sid <= 0) {
@@ -343,6 +318,11 @@ export default {
       } else {
         return "编辑数据内容审核策略";
       }
+    },
+    properties: function() {
+      return this.crProps[this.cr.type] === undefined
+        ? []
+        : this.crProps[this.cr.type].properties;
     },
   },
 };

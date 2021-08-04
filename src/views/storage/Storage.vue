@@ -44,6 +44,7 @@ import {
   findStorageById,
   activeStorage,
   defaultStorage,
+  allStorageTypes,
 } from "../../api/adminapi";
 import { wellSize } from "../../utils/utils.js";
 export default {
@@ -58,9 +59,6 @@ export default {
       limit: 5,
       total: 0,
       storageTypes: {
-        alioss: "阿里云OSS",
-        fs: "文件系统",
-        qqcos: "腾讯云COS",
       },
       storagePermissionTypes: {
         private: "私有",
@@ -70,7 +68,20 @@ export default {
     };
   },
   created: function() {
-    this.loadStorages(1);
+    allStorageTypes(
+      (data) => {
+        for(let stype in data.data){
+          this.storageTypes[stype] = data.data[stype].name
+        }
+        this.loadStorages(1);
+      },
+      (data) => {
+        this.$notify.error({
+          title: "错误",
+          message: `加载存储策略类型失败，原因${data.reason}`,
+        });
+      }
+    );
   },
   methods: {
     loadStorages(page) {
@@ -95,7 +106,7 @@ export default {
                 capacity: wellSize(item.capacity * 1024 * 1024),
                 used: wellSize(item.usedSize),
                 permission: this.storagePermissionTypes[item.storagePermission],
-                crname: item.crName || "未关联" 
+                crname: item.crName || "未关联",
               };
               this.storages.push(storage);
             }

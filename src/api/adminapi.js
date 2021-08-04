@@ -66,6 +66,15 @@ function allStorageList(resolve, reject) {
     .catch((err) => reject(err));
 }
 
+function allStorageTypes(resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(`${config.url}/api/admin/storage/all/types`)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
 function findStorageById(sid, resolve, reject) {
   resolve = resolve || function() {};
   reject = reject || function() {};
@@ -78,8 +87,6 @@ function findStorageById(sid, resolve, reject) {
 function newStorage(storage, resolve, reject) {
   resolve = resolve || function() {};
   reject = reject || function() {};
-  storage.config.externUrls = storage.externUrls;
-  storage.externUrls = null;
   axios
     .post(`${config.url}/api/admin/storage`, storage)
     .then((resp) => resolve(resp.data))
@@ -89,8 +96,6 @@ function newStorage(storage, resolve, reject) {
 function updateStorage(sid, storage, resolve, reject) {
   resolve = resolve || function() {};
   reject = reject || function() {};
-  storage.config.externUrls = storage.externUrls;
-  storage.externUrls = null;
   axios
     .put(`${config.url}/api/admin/storage/${sid}`, storage)
     .then((resp) => resolve(resp.data))
@@ -144,6 +149,15 @@ function allCRList(resolve, reject) {
   reject = reject || function() {};
   axios
     .get(`${config.url}/api/admin/cr/all`)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function allCRTypes(resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(`${config.url}/api/admin/cr/all/types`)
     .then((resp) => resolve(resp.data))
     .catch((err) => reject(err));
 }
@@ -437,6 +451,7 @@ export {
   activeStorage,
   defaultStorage,
   allStorageList,
+  allStorageTypes,
   CRList,
   findCRById,
   newCR,
@@ -444,6 +459,7 @@ export {
   deleteCR,
   defaultCR,
   allCRList,
+  allCRTypes,
   userList,
   findUserById,
   findFreeUser,

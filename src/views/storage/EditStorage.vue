@@ -115,10 +115,7 @@
                         v-model="storage.crStrategy"
                         style="width:100%"
                       >
-                      <option
-                          :value="0"
-                          >不关联策略</option
-                        >
+                        <option :value="0">不关联策略</option>
                         <option
                           v-for="item in crs"
                           v-bind:key="item.name"
@@ -195,76 +192,13 @@
             {{ storagetitle }}
           </CCardHeader>
           <CCardBody>
-            <CForm v-if="storage.type === 'alioss'">
+            <CForm v-show="storage.type">
               <CInput
-                label="Endpoint"
+                v-for="item in properties"
+                v-bind:key="item.name"
+                :label="item.showName"
+                v-model="storage.config[item.name]"
                 horizontal
-                v-model="storage.config.endpoint"
-                :disabled="readonly"
-              />
-              <CInput
-                label="Bucket 名称"
-                horizontal
-                v-model="storage.config.bucketName"
-                :disabled="readonly"
-              />
-              <CInput
-                label="accessKeyId"
-                horizontal
-                v-model="storage.config.accesskeyId"
-                :disabled="readonly"
-              />
-              <CInput
-                label="accessKeySecret"
-                horizontal
-                v-model="storage.config.accessKeySecret"
-                :disabled="readonly"
-              />
-              <CInput
-                label="前缀"
-                horizontal
-                v-model="storage.config.prefix"
-                :disabled="readonly"
-              />
-            </CForm>
-            <CForm v-if="storage.type === 'qqcos'">
-              <CInput
-                label="BucketName"
-                horizontal
-                v-model="storage.config.bucketName"
-                :disabled="readonly"
-              />
-              <CInput
-                label="Region"
-                horizontal
-                v-model="storage.config.region"
-                :disabled="readonly"
-              />
-
-              <CInput
-                label="secretID"
-                horizontal
-                v-model="storage.config.secretID"
-                :disabled="readonly"
-              />
-              <CInput
-                label="secretKey"
-                horizontal
-                v-model="storage.config.secretKey"
-                :disabled="readonly"
-              />
-              <CInput
-                label="前缀"
-                horizontal
-                v-model="storage.config.prefix"
-                :disabled="readonly"
-              />
-            </CForm>
-            <CForm v-if="storage.type === 'fs'">
-              <CInput
-                label="主目录"
-                horizontal
-                v-model="storage.config.root"
                 :disabled="readonly"
               />
             </CForm>
@@ -281,6 +215,7 @@ import {
   newStorage,
   updateStorage,
   allCRList,
+  allStorageTypes,
 } from "../../api/adminapi";
 import { deepCopy } from "../../utils/utils";
 
@@ -310,7 +245,8 @@ export default {
         storagePermission: "private",
         config: {},
       },
-      crs: []
+      storageProps: {},
+      crs: [],
     };
   },
   created: function() {
@@ -319,20 +255,35 @@ export default {
     if (path.indexOf("/storages/show/") !== -1) {
       this.readonly = true;
     }
-    if (this.sid > 0) {
-      this.resetStorage();
-    }
 
-    allCRList(
+    allStorageTypes(
       (data) => {
-        if (data.code === 200) {
-          this.crs = data.data
+        for (let stype in data.data) {
+          this.storageTypes[stype] = data.data[stype].name;
+        }
+
+        this.storageProps = data.data;
+        if (this.sid > 0) {
+          this.resetStorage();
+          allCRList(
+            (data) => {
+              if (data.code === 200) {
+                this.crs = data.data;
+              }
+            },
+            (data) => {
+              this.$notify.error({
+                title: "错误",
+                message: `获取存储策略列表，原因${data.reason}`,
+              });
+            }
+          );
         }
       },
       (data) => {
         this.$notify.error({
           title: "错误",
-          message: `获取存储策略列表，原因${data.reason}`,
+          message: `加载存储策略类型失败，原因${data.reason}`,
         });
       }
     );
@@ -344,7 +295,6 @@ export default {
         (data) => {
           if (data.code === 200) {
             this.storage = data.data;
-            this.storage.externUrls = data.data.config.externUrls;
           }
         },
         (data) => {
@@ -422,15 +372,7 @@ export default {
   },
   computed: {
     storagetitle: function() {
-      if (this.storage.type === "alioss") {
-        return "配置阿里云OSS";
-      }
-      if (this.storage.type === "fs") {
-        return "配置存储目录";
-      }
-      if (this.storage.type === "qqcos") {
-        return "配置腾讯云COS";
-      }
+      return this.storageTypes[this.storage.type];
     },
     title: function() {
       if (this.sid <= 0) {
@@ -438,6 +380,11 @@ export default {
       } else {
         return "编辑数据存储策略";
       }
+    },
+    properties: function() {
+      return this.storageProps[this.storage.type] === undefined
+        ? []
+        : this.storageProps[this.storage.type].properties;
     },
   },
 };

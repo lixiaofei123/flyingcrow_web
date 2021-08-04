@@ -61,7 +61,11 @@
                   alertText
                 }}</CAlert>
 
-                <CButton color="success" :disabled="!allowRegister" block @click="registerNow()"
+                <CButton
+                  color="success"
+                  :disabled="!allowRegister"
+                  block
+                  @click="registerNow()"
                   >注册</CButton
                 >
               </CForm>
@@ -123,7 +127,7 @@ export default {
             if (data.code === 200) {
               this.success(`注册成功，页面将在5秒后跳转`);
               let token = data.message;
-              cookies.set("authorization", token);
+              cookies.set("authorization", token, 6);
               setTimeout(() => {
                 this.$router.push({ path: `/index` });
               }, 5000);

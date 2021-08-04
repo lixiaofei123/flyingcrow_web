@@ -27,13 +27,16 @@
       <img name="logo" height="40" alt="Logo" src="img/logo_main.png" />
     </CHeaderBrand>
     <CHeaderNav class="mr-4">
-      <CHeaderNavItem class="d-md-down-none mx-2" >
+      <CHeaderNavItem class="d-md-down-none mx-2">
         <CHeaderNavLink>
           {{ user.nickName || user.name }}
         </CHeaderNavLink>
       </CHeaderNavItem>
       <TheHeaderDropdownAccnt :user="user" :stat="stat" @logout="logout" />
     </CHeaderNav>
+    <CSubheader class="px-3">
+      <CBreadcrumbRouter class="border-0 mb-0" />
+    </CSubheader>
   </CHeader>
 </template>
 

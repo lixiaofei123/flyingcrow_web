@@ -104,6 +104,33 @@
                 :disabled="readonly"
               />
               <CRow form class="form-group">
+                <CCol sm="3">
+                  关联内容审核策略
+                </CCol>
+                <CCol sm="9">
+                  <CRow>
+                    <CCol sm="12">
+                      <select
+                        class="form-control"
+                        v-model="storage.crStrategy"
+                        style="width:100%"
+                      >
+                      <option
+                          :value="0"
+                          >不关联策略</option
+                        >
+                        <option
+                          v-for="item in crs"
+                          v-bind:key="item.name"
+                          :value="item.id"
+                          >{{ item.name }}</option
+                        >
+                      </select>
+                    </CCol>
+                  </CRow>
+                </CCol>
+              </CRow>
+              <CRow form class="form-group">
                 <CCol tag="label" sm="3" class="col-form-label">
                   外部访问链接
                 </CCol>
@@ -202,17 +229,18 @@
             </CForm>
             <CForm v-if="storage.type === 'qqcos'">
               <CInput
-                label="bucketURL"
+                label="BucketName"
                 horizontal
-                v-model="storage.config.bucketURL"
+                v-model="storage.config.bucketName"
                 :disabled="readonly"
               />
               <CInput
-                label="serviceURL"
+                label="Region"
                 horizontal
-                v-model="storage.config.serviceURL"
+                v-model="storage.config.region"
                 :disabled="readonly"
               />
+
               <CInput
                 label="secretID"
                 horizontal
@@ -248,7 +276,12 @@
 </template>
 
 <script>
-import { findStorageById, newStorage, updateStorage } from "../../api/adminapi";
+import {
+  findStorageById,
+  newStorage,
+  updateStorage,
+  allCRList,
+} from "../../api/adminapi";
 import { deepCopy } from "../../utils/utils";
 
 export default {
@@ -277,17 +310,32 @@ export default {
         storagePermission: "private",
         config: {},
       },
+      crs: []
     };
   },
   created: function() {
     this.sid = this.$route.params.id;
     let path = this.$route.path;
-    if (path.indexOf("/storages/show/") === 0) {
+    if (path.indexOf("/storages/show/") !== -1) {
       this.readonly = true;
     }
     if (this.sid > 0) {
       this.resetStorage();
     }
+
+    allCRList(
+      (data) => {
+        if (data.code === 200) {
+          this.crs = data.data
+        }
+      },
+      (data) => {
+        this.$notify.error({
+          title: "错误",
+          message: `获取存储策略列表，原因${data.reason}`,
+        });
+      }
+    );
   },
   methods: {
     resetStorage() {
@@ -299,11 +347,11 @@ export default {
             this.storage.externUrls = data.data.config.externUrls;
           }
         },
-        data => {
+        (data) => {
           this.$notify.error({
-              title: "错误",
-              message: `获取存储信息，原因${data.reason}`,
-            });
+            title: "错误",
+            message: `获取存储信息失败，原因${data.reason}`,
+          });
         }
       );
     },
@@ -337,16 +385,16 @@ export default {
             if (data.code === 200) {
               this.$notify({
                 title: "成功",
-                message: `新增存储【${data.data.name}】成功`,
+                message: `新增存储策略【${data.data.name}】成功`,
                 type: "success",
               });
-            } 
+            }
           },
-          data => {
+          (data) => {
             this.$notify.error({
-                title: "错误",
-                message: `新增存储【${this.storage.name}】失败，原因${data.reason}`,
-              });
+              title: "错误",
+              message: `新增存储策略【${this.storage.name}】失败，原因${data.reason}`,
+            });
           }
         );
       } else {
@@ -357,16 +405,16 @@ export default {
             if (data.code === 200) {
               this.$notify({
                 title: "成功",
-                message: `更新存储【${data.data.name}】成功`,
+                message: `更新存储策略【${data.data.name}】成功`,
                 type: "success",
               });
-            } 
+            }
           },
-          data => {
+          (data) => {
             this.$notify.error({
-                title: "错误",
-                message: `更新存储【${this.storage.name}】失败，原因${data.reason}`,
-              });
+              title: "错误",
+              message: `更新存储策略【${this.storage.name}】失败，原因${data.reason}`,
+            });
           }
         );
       }
@@ -386,9 +434,9 @@ export default {
     },
     title: function() {
       if (this.sid <= 0) {
-        return "添加新的存储";
+        return "添加新的存储策略";
       } else {
-        return "编辑数据存储";
+        return "编辑数据存储策略";
       }
     },
   },

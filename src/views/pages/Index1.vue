@@ -173,7 +173,7 @@ export default {
   created() {
     this.uploadAction = `${window.globalConfig.url}/file/upload`;
     this.loadInfo();
-    document.addEventListener("paste", (event) => {
+    this.pasteListener = (event) => {
       var items = event.clipboardData && event.clipboardData.items;
       var file = null;
       if (items && items.length) {
@@ -199,7 +199,7 @@ export default {
                 file,
                 (progress) => {
                   fileItem.percentage = progress;
-                  this.fileUpload("",fileItem);
+                  this.fileUpload("", fileItem);
                 },
                 (data) => {
                   fileItem.percentage = 100;
@@ -219,10 +219,11 @@ export default {
           }
         }
       }
-    });
+    };
+    document.addEventListener("paste", this.pasteListener);
   },
   destroyed() {
-    document.removeEventListener("paste");
+    document.removeEventListener("paste", this.pasteListener);
   },
   methods: {
     loadInfo() {
@@ -239,6 +240,11 @@ export default {
                   this.loginSuccess = true;
                   this.user = data.data.user;
                   this.stat = data.data.stat;
+                  if (data.data.group) {
+                    this.maxFileSize = data.data.group.maxFileSize;
+                    this.allowFileExtension =
+                      data.data.group.allowFileExtension;
+                  }
                 }
               },
               () => {

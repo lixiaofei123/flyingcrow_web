@@ -6,11 +6,11 @@
           <CCardHeader>
             <CRow>
               <CCol md="10">
-                存储管理
+                存储策略
               </CCol>
               <CCol md="2">
                 <CButton block color="primary" size="sm" @click="newStorage"
-                  >添加存储</CButton
+                  >添加存储策略</CButton
                 >
               </CCol>
             </CRow>
@@ -95,6 +95,7 @@ export default {
                 capacity: wellSize(item.capacity * 1024 * 1024),
                 used: wellSize(item.usedSize),
                 permission: this.storagePermissionTypes[item.storagePermission],
+                crname: item.crName || "未关联" 
               };
               this.storages.push(storage);
             }
@@ -130,7 +131,7 @@ export default {
                     if (data.code === 200) {
                       this.$notify({
                         title: "成功",
-                        message: `删除存储【${data.data.name}】成功`,
+                        message: `删除存储策略【${data.data.name}】成功`,
                         type: "success",
                       });
                       let index = this.storages.findIndex(
@@ -142,7 +143,7 @@ export default {
                   (data) => {
                     this.$notify.error({
                       title: "错误",
-                      message: `删除存储【${id}】失败，原因${data.reason}`,
+                      message: `删除存储策略【${id}】失败，原因${data.reason}`,
                     });
                   }
                 );
@@ -153,7 +154,7 @@ export default {
         (data) => {
           this.$notify.error({
             title: "错误",
-            message: `获取存储信息，原因${data.reason}`,
+            message: `获取存储信息失败，原因${data.reason}`,
           });
         }
       );

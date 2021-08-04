@@ -60,6 +60,19 @@
           horizontal
           v-model="group.trafficQuota"
         />
+        <CInput
+          label="单文件上传限制"
+          type="number"
+          append="MB"
+          horizontal
+          v-model="group.maxFileSize"
+        />
+        <CInput
+          label="允许后缀"
+          type="text"
+          horizontal
+          v-model="group.allowFileExtension"
+        />
         <CRow form class="form-group">
           <CCol sm="3">
             关联存储
@@ -140,6 +153,8 @@ export default {
         name: "",
         groupId: -1,
         allowUseExternUrl: false,
+        maxFileSize: 5120,
+        allowFileExtension: "*",
       },
     };
   },
@@ -152,7 +167,8 @@ export default {
       (data) => {
         if (data.code === 200) {
           this.defaultStorageSize = data.data.registerConfig.storageSize;
-          this.defaultTrafficPerMonth = data.data.registerConfig.trafficPerMonth;
+          this.defaultTrafficPerMonth =
+            data.data.registerConfig.trafficPerMonth;
         } else {
         }
       },
@@ -167,11 +183,11 @@ export default {
             this.storages = data.data;
           }
         },
-        data => {
+        (data) => {
           this.$notify.error({
-              title: "错误",
-              message: `加载存储列表失败，原因${data.reason}`,
-            });
+            title: "错误",
+            message: `加载存储列表失败，原因${data.reason}`,
+          });
         }
       );
     },
@@ -189,13 +205,13 @@ export default {
                 type: "success",
               });
               this.loadGroups(1);
-            } 
+            }
           },
-          data => {
+          (data) => {
             this.$notify.error({
-                title: "错误",
-                message: `创建用户组【${this.group.name}】失败，原因${data.reason}`,
-              });
+              title: "错误",
+              message: `创建用户组【${this.group.name}】失败，原因${data.reason}`,
+            });
           }
         );
       } else {
@@ -214,11 +230,11 @@ export default {
               this.loadGroups(this.current);
             }
           },
-          data => {
+          (data) => {
             this.$notify.error({
-                title: "错误",
-                message: `更新用户组信息失败，原因${data.reason}`,
-              });
+              title: "错误",
+              message: `更新用户组信息失败，原因${data.reason}`,
+            });
           }
         );
       }
@@ -282,11 +298,11 @@ export default {
                       this.groups.splice(index, 1);
                     }
                   },
-                  data => {
+                  (data) => {
                     this.$notify.error({
-                        title: "错误",
-                        message: `删除用户组失败，原因${data.reason}`,
-                      });
+                      title: "错误",
+                      message: `删除用户组失败，原因${data.reason}`,
+                    });
                   }
                 );
               })
@@ -304,6 +320,8 @@ export default {
         trafficQuota: this.defaultTrafficPerMonth,
         groupId: -1,
         allowUseExternUrl: false,
+        maxFileSize: 5120,
+        allowFileExtension: "*",
       };
       this.modalTitle = "新增用户组";
       this.showEditGroup = true;
@@ -331,6 +349,8 @@ export default {
               count: item.count,
               storageName: "无",
               allowUseExternUrl: false,
+              maxFileSize: item.maxFileSize + 'M',
+              allowFileExtension: item.allowFileExtension
             };
             if (item.groupStorages && item.groupStorages.length > 0) {
               group.storageName = item.groupStorages[0].storageName;

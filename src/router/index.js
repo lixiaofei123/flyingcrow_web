@@ -9,6 +9,10 @@ const Dashboard = () => import("@/views/Dashboard");
 
 const Storage = () => import("@/views/storage/Storage");
 const EditStorage = () => import("@/views/storage/EditStorage");
+
+const CR = () => import("@/views/storage/CR");
+const EditCR = () => import("@/views/storage/EditCR");
+
 const File = () => import("@/views/file/File");
 
 const Token = () => import("@/views/token/Token");
@@ -169,9 +173,39 @@ function configRoutes() {
               path: "show/:id",
               name: "查看存储",
               component: EditStorage,
+            }
+          ],
+        },
+        {
+          path: "crs",
+          redirect: "/admin/crs",
+          meta: {
+            label: "审核策略",
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            },
+          },
+          children: [
+            {
+              path: "",
+              name: "审核策略列表",
+              component: CR,
+            },
+            {
+              path: "edit/:id",
+              name: "新增/编辑审核策略",
+              component: EditCR,
+            },
+            {
+              path: "show/:id",
+              name: "查看审核策略",
+              component: EditCR,
             },
           ],
         },
+        
         {
           path: "users",
           redirect: "/admin/users/list",

@@ -39,7 +39,9 @@
                     </CCol>
                     <CCol col="6" class="text-right">
                       <!-- CButton color="link" class="px-0">忘记密码?</CButton -->
-                      <CButton color="link" class="px-0" v-if="allowRegister">立即注册!</CButton>
+                      <CButton color="link" class="px-0" v-if="allowRegister"
+                        >立即注册!</CButton
+                      >
                     </CCol>
                   </CRow>
                 </CForm>
@@ -70,7 +72,7 @@
 </template>
 
 <script>
-import { siteInfo,login } from "../../api/api";
+import { siteInfo, login } from "../../api/api";
 var cookies = require("vue-cookie");
 
 export default {
@@ -79,13 +81,13 @@ export default {
     return {
       username: "",
       password: "",
-      allowRegister: true
+      allowRegister: true,
     };
   },
-  created(){
-    siteInfo(data=>{
-       this.allowRegister = data.data.site.allowRegister;
-    })
+  created() {
+    siteInfo((data) => {
+      this.allowRegister = data.data.site.allowRegister;
+    });
   },
   methods: {
     loginFlyingCrow() {
@@ -95,7 +97,7 @@ export default {
         (data) => {
           if (data.code === 200) {
             let token = data.message;
-            cookies.set("authorization", token);
+            cookies.set("authorization", token, 6);
             this.$router.push({ path: `/index` });
           }
         },

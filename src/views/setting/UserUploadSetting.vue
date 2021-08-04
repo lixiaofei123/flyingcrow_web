@@ -71,7 +71,7 @@
                     <CRow>
                       <CCol sm="12">
                         <el-slider
-                          v-model="setting.watermarkConfig.verticalPadding"
+                          v-model="setting.watermarkConfig.horizontalPadding"
                           :min="0"
                           :max="1000"
                         ></el-slider>
@@ -87,7 +87,7 @@
                     <CRow>
                       <CCol sm="12">
                         <el-slider
-                          v-model="setting.watermarkConfig.horizontalPadding"
+                          v-model="setting.watermarkConfig.verticalPadding"
                           :min="0"
                           :max="1000"
                         ></el-slider>

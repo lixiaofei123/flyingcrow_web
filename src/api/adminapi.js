@@ -36,7 +36,6 @@ axios.interceptors.response.use(
           window.location = "#/login";
         }
       } else if (error.response.status === 401) {
-
       } else {
         if (error.response.data) {
           return Promise.reject(error.response.data);
@@ -46,7 +45,6 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 
 function storageList(page, limit, resolve, reject) {
   resolve = resolve || function() {};
@@ -130,15 +128,84 @@ function defaultStorage(sid, setDefault, resolve, reject) {
     .catch((err) => reject(err));
 }
 
-function userList(query, page, limit, resolve, reject) {
+function CRList(page, limit, resolve, reject) {
   resolve = resolve || function() {};
   reject = reject || function() {};
   axios
-    .get(`${config.url}/api/admin/user?query=${query}&page=${page}&limit=${limit}`)
+    .get(`${config.url}/api/admin/cr?page=${page}&limit=${limit}`)
+    .then((resp) => resolve(resp.data))
+    .catch(() => {
+      reject();
+    });
+}
+
+function allCRList(resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(`${config.url}/api/admin/cr/all`)
     .then((resp) => resolve(resp.data))
     .catch((err) => reject(err));
 }
 
+function findCRById(sid, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(`${config.url}/api/admin/cr/${sid}`)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function newCR(cr, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .post(`${config.url}/api/admin/cr`, cr)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function updateCR(sid, cr, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+
+  axios
+    .put(`${config.url}/api/admin/cr/${sid}`, cr)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function deleteCR(sid, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .delete(`${config.url}/api/admin/cr/${sid}`)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function defaultCR(sid, setDefault, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  var bodyFormData = new FormData();
+  bodyFormData.append("default", setDefault);
+  axios
+    .post(`${config.url}/api/admin/cr/default/${sid}`, bodyFormData)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function userList(query, page, limit, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(
+      `${config.url}/api/admin/user?query=${query}&page=${page}&limit=${limit}`
+    )
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
 
 function findUserById(userId, resolve, reject) {
   resolve = resolve || function() {};
@@ -207,7 +274,9 @@ function groupList(query, page, limit, resolve, reject) {
   resolve = resolve || function() {};
   reject = reject || function() {};
   axios
-    .get(`${config.url}/api/admin/group?query=${query}&page=${page}&limit=${limit}`)
+    .get(
+      `${config.url}/api/admin/group?query=${query}&page=${page}&limit=${limit}`
+    )
     .then((resp) => resolve(resp.data))
     .catch((err) => reject(err));
 }
@@ -267,6 +336,8 @@ function newGroup(group, resolve, reject) {
       name: group.name,
       storageQuota: parseInt(group.storageQuota),
       trafficQuota: parseInt(group.trafficQuota),
+      maxFileSize: parseInt(group.maxFileSize),
+      allowFileExtension: group.allowFileExtension,
       groupStorages: [
         {
           storageId: group.storageId,
@@ -286,6 +357,8 @@ function updateGroup(groupId, group, resolve, reject) {
       name: group.name,
       storageQuota: parseInt(group.storageQuota),
       trafficQuota: parseInt(group.trafficQuota),
+      maxFileSize: parseInt(group.maxFileSize),
+      allowFileExtension: group.allowFileExtension,
       groupStorages: [
         {
           storageId: group.storageId,
@@ -315,7 +388,6 @@ function deleteUserFromGroup(gid, uid, resolve, reject) {
     .catch((err) => reject(err));
 }
 
-
 function getGlobalSetting(type, resolve, reject) {
   resolve = resolve || function() {};
   reject = reject || function() {};
@@ -335,29 +407,26 @@ function setGlobalSetting(type, setting, resolve, reject) {
 }
 
 function userStatinfo(userId, time, beginTime, endTime, resolve, reject) {
-    resolve = resolve || function() {};
-    reject = reject || function() {};
-    axios
-      .get(
-        `${config.url}/api/admin/stat/${userId}?time=${time}&beginTime=${beginTime}&endTime=${endTime}`
-      )
-      .then((resp) => resolve(resp.data))
-      .catch((err) => reject(err));
-  }
-  
-  function totalStatinfo(time, beginTime, endTime, resolve, reject) {
-    resolve = resolve || function() {};
-    reject = reject || function() {};
-    axios
-      .get(
-        `${config.url}/api/admin/stat?time=${time}&beginTime=${beginTime}&endTime=${endTime}`
-      )
-      .then((resp) => resolve(resp.data))
-      .catch((err) => reject(err));
-  }
-  
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(
+      `${config.url}/api/admin/stat/${userId}?time=${time}&beginTime=${beginTime}&endTime=${endTime}`
+    )
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
 
-
+function totalStatinfo(time, beginTime, endTime, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(
+      `${config.url}/api/admin/stat?time=${time}&beginTime=${beginTime}&endTime=${endTime}`
+    )
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
 
 export {
   storageList,
@@ -368,6 +437,13 @@ export {
   activeStorage,
   defaultStorage,
   allStorageList,
+  CRList,
+  findCRById,
+  newCR,
+  updateCR,
+  deleteCR,
+  defaultCR,
+  allCRList,
   userList,
   findUserById,
   findFreeUser,

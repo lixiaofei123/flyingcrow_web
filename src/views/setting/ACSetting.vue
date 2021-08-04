@@ -20,6 +20,18 @@
                   />
                 </CCol>
               </CRow>
+              <CRow form class="form-group" v-if="!setting.allowAnonymousRead">
+                <CCol tag="label" sm="3" class="col-form-label">
+                  允许他人访问
+                </CCol>
+                <CCol sm="9">
+                  <CSwitch
+                    class="mr-1"
+                    :checked.sync="setting.allowOtherRead"
+                    color="primary"
+                  />
+                </CCol>
+              </CRow>
               <div v-if="setting.allowAnonymousRead">
                 <CRow form class="form-group">
                   <CCol tag="label" sm="3" class="col-form-label">

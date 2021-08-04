@@ -80,6 +80,8 @@ export default {
         { key: "count", label: "成员数" },
         { key: "storageQuota", label: "存储配额" },
         { key: "trafficQuota", label: "流量配额" },
+        { key: "maxFileSize", label: "上传文件限制" },
+        { key: "allowFileExtension", label: "允许后缀" },
         { key: "storageName", label: "关联存储" },
         { key: "allowUseExternUrl", label: "允许使用外链" },
         { key: "opera", label: "操作" },

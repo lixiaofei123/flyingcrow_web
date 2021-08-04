@@ -31,10 +31,20 @@ let admin_nav = [
         ],
       },
       {
-        _name: "CSidebarNavItem",
+        _name: "CSidebarNavDropdown",
         name: "存储",
-        to: "/admin/storages",
-        icon: "cil-speedometer",
+        route: "/admin/storages",
+        icon: "cil-puzzle",
+        items: [
+          {
+            name: "存储策略",
+            to: "/admin/storages",
+          },
+          {
+            name: "内容审核策略",
+            to: "/admin/crs",
+          },
+        ],
       },
       {
         _name: "CSidebarNavDropdown",

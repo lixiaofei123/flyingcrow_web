@@ -27,7 +27,7 @@
                       <CCol sm="12">
                         <select
                           class="form-control"
-                          v-model="setting.watermarkConfig.type"
+                          v-model="setting.type"
                           style="width:100%"
                         >
                           <option :value="0">文本</option>
@@ -46,7 +46,7 @@
                       <CCol sm="12">
                         <select
                           class="form-control"
-                          v-model="setting.watermarkConfig.position"
+                          v-model="setting.position"
                           style="width:100%"
                         >
                           <option :value="0">左上角</option>
@@ -71,7 +71,7 @@
                     <CRow>
                       <CCol sm="12">
                         <el-slider
-                          v-model="setting.watermarkConfig.horizontalPadding"
+                          v-model="setting.horizontalPadding"
                           :min="0"
                           :max="1000"
                         ></el-slider>
@@ -87,7 +87,7 @@
                     <CRow>
                       <CCol sm="12">
                         <el-slider
-                          v-model="setting.watermarkConfig.verticalPadding"
+                          v-model="setting.verticalPadding"
                           :min="0"
                           :max="1000"
                         ></el-slider>
@@ -103,7 +103,7 @@
                     <CRow>
                       <CCol sm="12">
                         <el-slider
-                          v-model="setting.watermarkConfig.minWidth"
+                          v-model="setting.minWidth"
                           :min="0"
                           :max="1000"
                         ></el-slider>
@@ -119,7 +119,7 @@
                     <CRow>
                       <CCol sm="12">
                         <el-slider
-                          v-model="setting.watermarkConfig.minHeight"
+                          v-model="setting.minHeight"
                           :min="0"
                           :max="1000"
                         ></el-slider>
@@ -129,13 +129,11 @@
                 </CRow>
               </div>
 
-              <div
-                v-if="setting.watermark && setting.watermarkConfig.type === 0"
-              >
+              <div v-if="setting.watermark && setting.type === 0">
                 <CInput
                   label="文本内容"
                   type="text"
-                  v-model="setting.watermarkConfig.text"
+                  v-model="setting.text"
                   horizontal
                 />
                 <CRow form class="form-group">
@@ -146,7 +144,7 @@
                     <CRow>
                       <CCol sm="12">
                         <el-color-picker
-                          v-model="setting.watermarkConfig.textColor"
+                          v-model="setting.textColor"
                         ></el-color-picker>
                       </CCol>
                     </CRow>
@@ -160,7 +158,7 @@
                     <CRow>
                       <CCol sm="12">
                         <el-slider
-                          v-model="setting.watermarkConfig.textSize"
+                          v-model="setting.textSize"
                           :min="0"
                           :max="100"
                         ></el-slider>
@@ -169,9 +167,7 @@
                   </CCol>
                 </CRow>
               </div>
-              <div
-                v-if="setting.watermark && setting.watermarkConfig.type === 1"
-              >
+              <div v-if="setting.watermark && setting.type === 1">
                 <CRow form class="form-group">
                   <CCol tag="label" sm="3" class="col-form-label">
                     水印图片
@@ -220,64 +216,10 @@
                     <CRow>
                       <CCol sm="12">
                         <el-slider
-                          v-model="setting.watermarkConfig.scale"
+                          v-model="setting.scale"
                           :step="0.1"
                           :min="0"
                           :max="5"
-                        ></el-slider>
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                </CRow>
-              </div>
-
-              <CRow form class="form-group">
-                <CCol tag="label" sm="3" class="col-form-label">
-                  启用压缩
-                </CCol>
-                <CCol sm="9">
-                  <CSwitch
-                    :checked.sync="setting.isCompress"
-                    class="mr-1"
-                    color="primary"
-                  />
-                </CCol>
-              </CRow>
-              <div v-if="setting.isCompress">
-                <CRow form class="form-group">
-                  <CCol sm="3">
-                    压缩算法
-                  </CCol>
-                  <CCol sm="9">
-                    <CRow>
-                      <CCol sm="12">
-                        <select
-                          class="form-control"
-                          v-model="setting.compressConfig.type"
-                          style="width:100%"
-                        >
-                          <option :value="0">JPEG</option>
-                          <option :value="1">ZLIB</option>
-                          <option :value="2">PNG</option>
-                          <option :value="3">LZ4</option>
-                        </select>
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                </CRow>
-                <CRow form class="form-group">
-                  <CCol sm="3">
-                    压缩质量<HelpTips
-                      tips="压缩质量只对jpeg算法有效"
-                    ></HelpTips>
-                  </CCol>
-                  <CCol sm="9">
-                    <CRow>
-                      <CCol sm="12">
-                        <el-slider
-                          v-model="setting.compressConfig.quatile"
-                          :min="0"
-                          :max="100"
                         ></el-slider>
                       </CCol>
                     </CRow>
@@ -320,16 +262,16 @@
                     }"
                   >
                     <div
-                      v-if="setting.watermarkConfig.type === 0"
+                      v-if="setting.type === 0"
                       :style="{
-                        fontSize: setting.watermarkConfig.textSize + 'px',
-                        color: setting.watermarkConfig.textColor,
+                        fontSize: setting.textSize + 'px',
+                        color: setting.textColor,
                       }"
                     >
-                      {{ setting.watermarkConfig.text }}
+                      {{ setting.text }}
                     </div>
                     <img
-                      v-if="setting.watermarkConfig.type === 1"
+                      v-if="setting.type === 1"
                       :src="waterImg"
                       :style="{ transform: transform }"
                     />
@@ -351,7 +293,7 @@ var cookies = require("vue-cookie");
 import elementResizeDetectorMaker from "element-resize-detector";
 
 export default {
-  name: "UserUploadSetting",
+  name: "WaterMarkerSetting",
   components: {
     HelpTips,
   },
@@ -359,25 +301,18 @@ export default {
     return {
       setting: {
         watermark: false,
-        watermarkConfig: {
-          type: 0,
-          text: "",
-          textColor: "",
-          textSize: 0,
-          imageId: 0,
-          position: 0,
-          verticalPadding: 0,
-          horizontalPadding: 0,
-          isScale: false,
-          scale: 0,
-          minWidth: 0,
-          minHeight: 0,
-        },
-        isCompress: false,
-        compressConfig: {
-          type: 0,
-          quatile: 0,
-        },
+        type: 0,
+        text: "",
+        textColor: "",
+        textSize: 0,
+        imageId: 0,
+        position: 0,
+        verticalPadding: 0,
+        horizontalPadding: 0,
+        isScale: false,
+        scale: 0,
+        minWidth: 0,
+        minHeight: 0,
       },
       waterImg: "",
       fileId: 0,
@@ -405,17 +340,17 @@ export default {
   created: function() {
     this.uploadAction = `${window.globalConfig.url}/file/upload`;
     getSetting(
-      "userupload",
+      "watermarker",
       (data) => {
         if (data.code === 200) {
           this.setting = data.data;
-          this.fileId = this.setting.watermarkConfig.imageId;
+          this.fileId = this.setting.imageId;
         }
       },
       (data) => {
         this.$notify.error({
           title: "错误",
-          message: `加载上传配置出错，原因${data.reason}`,
+          message: `加载水印配置出错，原因${data.reason}`,
         });
       }
     );
@@ -458,17 +393,17 @@ export default {
         //this.user.WaterImg = response.data.urls[0];
       }
       this.uploadSuccessInfo("图片上传成功，水印图片将在保存后生效");
-      this.setting.watermarkConfig.scale = 1
+      this.setting.scale = 1;
     },
     saveSetting() {
       setSetting(
-        "userupload",
+        "watermarker",
         this.setting,
         (data) => {
           if (data.code === 200) {
             this.$notify({
               title: "成功",
-              message: `保存上传配置成功`,
+              message: `保存水印配置成功`,
               type: "success",
             });
           }
@@ -476,7 +411,7 @@ export default {
         (data) => {
           this.$notify.error({
             title: "错误",
-            message: `保存上传配置出错，原因${data.reason}`,
+            message: `保存水印配置出错，原因${data.reason}`,
           });
         }
       );
@@ -485,15 +420,15 @@ export default {
   computed: {
     horizontalPaddingText: function() {
       if (
-        this.setting.watermarkConfig.position == 0 ||
-        this.setting.watermarkConfig.position == 3 ||
-        this.setting.watermarkConfig.position == 6
+        this.setting.position == 0 ||
+        this.setting.position == 3 ||
+        this.setting.position == 6
       ) {
         return "左间距";
       } else if (
-        this.setting.watermarkConfig.position == 2 ||
-        this.setting.watermarkConfig.position == 5 ||
-        this.setting.watermarkConfig.position == 8
+        this.setting.position == 2 ||
+        this.setting.position == 5 ||
+        this.setting.position == 8
       ) {
         return "右间距";
       } else {
@@ -502,15 +437,15 @@ export default {
     },
     verticalPaddingText: function() {
       if (
-        this.setting.watermarkConfig.position == 0 ||
-        this.setting.watermarkConfig.position == 1 ||
-        this.setting.watermarkConfig.position == 2
+        this.setting.position == 0 ||
+        this.setting.position == 1 ||
+        this.setting.position == 2
       ) {
         return "顶部间距";
       } else if (
-        this.setting.watermarkConfig.position == 6 ||
-        this.setting.watermarkConfig.position == 7 ||
-        this.setting.watermarkConfig.position == 8
+        this.setting.position == 6 ||
+        this.setting.position == 7 ||
+        this.setting.position == 8
       ) {
         return "底部间距";
       } else {
@@ -518,31 +453,28 @@ export default {
       }
     },
     transform: function() {
-      return "scale(" + this.setting.watermarkConfig.scale + ")";
+      return "scale(" + this.setting.scale + ")";
     },
     left: function() {
       let realMarkWidth =
         this.wartermarkWidth *
-        (this.setting.watermarkConfig.type == 1
-          ? this.setting.watermarkConfig.scale
-          : 1);
+        (this.setting.type == 1 ? this.setting.scale : 1);
       let offset =
-        this.setting.watermarkConfig.type == 1
-          ? (this.wartermarkWidth * (1 - this.setting.watermarkConfig.scale)) /
-            2
+        this.setting.type == 1
+          ? (this.wartermarkWidth * (1 - this.setting.scale)) / 2
           : 0;
-      let padding = this.setting.watermarkConfig.horizontalPadding;
+      let padding = this.setting.horizontalPadding;
       if (
-        this.setting.watermarkConfig.position == 0 ||
-        this.setting.watermarkConfig.position == 3 ||
-        this.setting.watermarkConfig.position == 6
+        this.setting.position == 0 ||
+        this.setting.position == 3 ||
+        this.setting.position == 6
       ) {
         let maxLeft = this.wartermarkBgWidth - realMarkWidth;
         return (padding <= maxLeft ? padding : maxLeft) - offset + "px";
       } else if (
-        this.setting.watermarkConfig.position == 2 ||
-        this.setting.watermarkConfig.position == 5 ||
-        this.setting.watermarkConfig.position == 8
+        this.setting.position == 2 ||
+        this.setting.position == 5 ||
+        this.setting.position == 8
       ) {
         let left = this.wartermarkBgWidth - realMarkWidth - padding;
         return (left >= 0 ? left : 0) - offset + "px";
@@ -553,26 +485,23 @@ export default {
     top: function() {
       let realMarkHeight =
         this.wartermarkHeight *
-        (this.setting.watermarkConfig.type == 1
-          ? this.setting.watermarkConfig.scale
-          : 1);
+        (this.setting.type == 1 ? this.setting.scale : 1);
       let offset =
-        this.setting.watermarkConfig.type == 1
-          ? (this.wartermarkHeight * (1 - this.setting.watermarkConfig.scale)) /
-            2
+        this.setting.type == 1
+          ? (this.wartermarkHeight * (1 - this.setting.scale)) / 2
           : 0;
-      let padding = this.setting.watermarkConfig.verticalPadding;
+      let padding = this.setting.verticalPadding;
       if (
-        this.setting.watermarkConfig.position == 0 ||
-        this.setting.watermarkConfig.position == 1 ||
-        this.setting.watermarkConfig.position == 2
+        this.setting.position == 0 ||
+        this.setting.position == 1 ||
+        this.setting.position == 2
       ) {
         let maxTop = this.wartermarkBgHeight - realMarkHeight;
         return (padding <= maxTop ? padding : maxTop) - offset + "px";
       } else if (
-        this.setting.watermarkConfig.position == 6 ||
-        this.setting.watermarkConfig.position == 7 ||
-        this.setting.watermarkConfig.position == 8
+        this.setting.position == 6 ||
+        this.setting.position == 7 ||
+        this.setting.position == 8
       ) {
         let top = this.wartermarkBgHeight - realMarkHeight - padding;
         return (top >= 0 ? top : 0) - offset + "px";
@@ -590,7 +519,7 @@ export default {
             if (data.code === 200) {
               let url = data.data.urls[0];
               this.waterImg = url;
-              this.setting.watermarkConfig.imageId = this.fileId;
+              this.setting.imageId = this.fileId;
             }
           },
           (data) => {

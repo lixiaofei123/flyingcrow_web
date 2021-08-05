@@ -23,18 +23,17 @@ const User = () => import("@/views/users/User");
 const Groups = () => import("@/views/users/Groups");
 const Group = () => import("@/views/users/Group");
 
-
 const SiteUploadSetting = () => import("@/views/setting/SiteUploadSetting");
-const UserUploadSetting = () => import("@/views/setting/UserUploadSetting");
+const WaterMarkerSetting = () => import("@/views/setting/WaterMarkerSetting");
 
 const SiteSetting = () => import("@/views/setting/SiteSetting");
-const OtherSetting = () => import("@/views/setting/OtherSetting")
-const ACSetting = () => import("@/views/setting/ACSetting")
+const OtherSetting = () => import("@/views/setting/OtherSetting");
+const ACSetting = () => import("@/views/setting/ACSetting");
 
-const LocalUpload = () => import("@/views/upload/LocalUpload")
-const RemoteDownload = () => import("@/views/upload/RemoteDownload")
+const LocalUpload = () => import("@/views/upload/LocalUpload");
+const RemoteDownload = () => import("@/views/upload/RemoteDownload");
 
-const Me = () => import("@/views/me/Me")
+const Me = () => import("@/views/me/Me");
 
 const Colors = () => import("@/views/theme/Colors");
 const Typography = () => import("@/views/theme/Typography");
@@ -77,12 +76,11 @@ const Badges = () => import("@/views/notifications/Badges");
 const Modals = () => import("@/views/notifications/Modals");
 
 // Views - Pages
-const Index = () => import("@/views/pages/Index1")
+const Index = () => import("@/views/pages/Index1");
 const Page404 = () => import("@/views/pages/Page404");
 const Page500 = () => import("@/views/pages/Page500");
 const Login = () => import("@/views/pages/Login");
 const Register = () => import("@/views/pages/Register");
-
 
 Vue.use(Router);
 
@@ -135,12 +133,13 @@ function configRoutes() {
               return c("router-view");
             },
           },
-          children: [ 
+          children: [
             {
               path: "local",
               name: "本地上传",
               component: LocalUpload,
-            },{
+            },
+            {
               path: "remote",
               name: "远程下载",
               component: RemoteDownload,
@@ -173,7 +172,7 @@ function configRoutes() {
               path: "show/:id",
               name: "查看存储",
               component: EditStorage,
-            }
+            },
           ],
         },
         {
@@ -205,7 +204,7 @@ function configRoutes() {
             },
           ],
         },
-        
+
         {
           path: "users",
           redirect: "/admin/users/list",
@@ -222,7 +221,8 @@ function configRoutes() {
               path: "list",
               name: "用户列表",
               component: Users,
-            },{
+            },
+            {
               path: "groups",
               name: "用户组",
               component: Groups,
@@ -247,14 +247,14 @@ function configRoutes() {
               },
               name: "Group",
               component: Group,
-            }
+            },
           ],
         },
         {
           path: "setting",
           redirect: "/admin/setting/upload",
           meta: {
-            label: "设置",
+            label: "系统设置",
           },
           component: {
             render(c) {
@@ -266,19 +266,13 @@ function configRoutes() {
               path: "upload",
               name: "传输设置",
               component: SiteUploadSetting,
-            },{
-              path: "userupload",
-              name: "传输设置",
-              component: UserUploadSetting,
-            },{
-              path: "ac",
-              name: "访问控制",
-              component: ACSetting,
-            },{
+            },
+            {
               path: "site",
               name: "站点设置",
               component: SiteSetting,
-            },{
+            },
+            {
               path: "other",
               name: "其它设置",
               component: OtherSetting,
@@ -286,9 +280,33 @@ function configRoutes() {
           ],
         },
         {
-          path: "me",
-          name: "个人资料",
-          component: Me,
+          path: "my",
+          redirect: "/admin/my",
+          meta: {
+            label: "个人设置",
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            },
+          },
+          children: [
+            {
+              path: "",
+              name: "个人资料",
+              component: Me,
+            },
+            {
+              path: "marker",
+              name: "水印设置",
+              component: WaterMarkerSetting,
+            },
+            {
+              path: "ac",
+              name: "访问控制",
+              component: ACSetting,
+            },
+          ],
         },
         {
           path: "theme",

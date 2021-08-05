@@ -17,6 +17,18 @@
                   />
                 </CCol>
               </CRow>
+              <CRow form class="form-group">
+                <CCol tag="label" sm="3" class="col-form-label">
+                  启用图片压缩
+                </CCol>
+                <CCol sm="9">
+                  <CSwitch
+                    :checked.sync="setting.enableCompress"
+                    class="mr-1"
+                    color="primary"
+                  />
+                </CCol>
+              </CRow>
               <CInput
                 label="单个文件大小"
                 type="number"
@@ -102,6 +114,7 @@ export default {
     return {
       setting: {
         allowAnonymousUpload: true,
+        enableCompress: false,
         maxFileSize: 0,
         allowFileExtension: "",
         nameRole: "",

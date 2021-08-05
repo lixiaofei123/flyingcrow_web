@@ -68,21 +68,13 @@ let admin_nav = [
       },
       {
         _name: "CSidebarNavDropdown",
-        name: "设置",
+        name: "系统设置",
         route: "/admin/setting",
         icon: "cil-puzzle",
         items: [
           {
             name: "传输设置",
             to: "/admin/setting/upload",
-          },
-          {
-            name: "上传设置",
-            to: "/admin/setting/userupload",
-          },
-          {
-            name: "访问控制",
-            to: "/admin/setting/ac",
           },
           {
             name: "站点设置",
@@ -95,10 +87,24 @@ let admin_nav = [
         ],
       },
       {
-        _name: "CSidebarNavItem",
-        name: "个人资料",
-        to: "/admin/me",
-        icon: "cil-speedometer",
+        _name: "CSidebarNavDropdown",
+        name: "个人设置",
+        route: "/admin/my",
+        icon: "cil-puzzle",
+        items: [
+          {
+            name: "个人资料",
+            to: "/admin/my",
+          },
+          {
+            name: "水印设置",
+            to: "/admin/my/marker",
+          },
+          {
+            name: "访问控制",
+            to: "/admin/my/ac",
+          },
+        ],
       },
     ],
   },
@@ -144,25 +150,23 @@ let user_nav = [
       },
       {
         _name: "CSidebarNavDropdown",
-        name: "设置",
-        route: "/admin/setting",
+        name: "个人设置",
+        route: "/admin/my",
         icon: "cil-puzzle",
         items: [
           {
-            name: "上传设置",
-            to: "/admin/setting/userupload",
+            name: "个人资料",
+            to: "/admin/my",
+          },
+          {
+            name: "水印设置",
+            to: "/admin/my/marker",
           },
           {
             name: "访问控制",
-            to: "/admin/setting/ac",
+            to: "/admin/my/ac",
           },
         ],
-      },
-      {
-        _name: "CSidebarNavItem",
-        name: "个人资料",
-        to: "/admin/me",
-        icon: "cil-speedometer",
       },
     ],
   },

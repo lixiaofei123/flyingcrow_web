@@ -37,7 +37,7 @@
       </CHeaderNav>
     </CHeader>
     <div class="container">
-      <CAlert show color="primary">{{ welcomeText }}</CAlert>
+      <CAlert show color="primary" v-html="welcomeText"></CAlert>
       <CAlert show color="danger" v-if="!loginSuccess && !allowAnonymousUpload"
         >当前站点已经禁止匿名用户上传</CAlert
       >

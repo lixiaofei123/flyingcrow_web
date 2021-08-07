@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="fullscreen">
     <CHeader>
       <CHeaderBrand class="mx-auto" to="/">
         <img name="logo" height="40" alt="Logo" src="img/logo_main.png" />
@@ -367,6 +367,7 @@ export default {
   width: 100%;
   height: 150px;
 }
+
 </style>
 
 <style>

@@ -5,7 +5,9 @@ import Router from "vue-router";
 const TheContainer = () => import("@/containers/TheContainer");
 
 // Views
-const Dashboard = () => import("@/views/Dashboard");
+const AdminDashboard = () => import("@/views/dashboard/AdminDashboard");
+const UserDashboard = () => import("@/views/dashboard/UserDashboard");
+
 
 const Storage = () => import("@/views/storage/Storage");
 const EditStorage = () => import("@/views/storage/EditStorage");
@@ -14,6 +16,7 @@ const CR = () => import("@/views/storage/CR");
 const EditCR = () => import("@/views/storage/EditCR");
 
 const File = () => import("@/views/file/File");
+const Images = () => import("@/views/file/Images");
 
 const Token = () => import("@/views/token/Token");
 
@@ -101,8 +104,13 @@ function configRoutes() {
       children: [
         {
           path: "dashboard",
-          name: "面板",
-          component: Dashboard,
+          name: "站点面板",
+          component: AdminDashboard,
+        },
+        {
+          path: "userdashboard",
+          name: "个人面板",
+          component: UserDashboard,
         },
         {
           path: "files",
@@ -119,6 +127,24 @@ function configRoutes() {
               path: "",
               name: "文件管理",
               component: File,
+            },
+          ],
+        },
+        {
+          path: "images",
+          meta: {
+            label: "图片",
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            },
+          },
+          children: [
+            {
+              path: "",
+              name: "图片管理",
+              component: Images,
             },
           ],
         },

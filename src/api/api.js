@@ -156,6 +156,15 @@ function fileList(path, resolve, reject) {
     .catch((err) => reject(err));
 }
 
+function imagesList(page, limit, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(`${config.url}/api/file/image/list?page=${page}&limit=${limit}`)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
 function mkDir(path, resolve, reject) {
   resolve = resolve || function() {};
   reject = reject || function() {};
@@ -318,6 +327,41 @@ function setSetting(type, setting, resolve, reject) {
     .catch((err) => reject(err));
 }
 
+function visitDataStatinfo(beginTime, endTime, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(
+      `${config.url}/api/stat/visitdata?beginTime=${beginTime}&endTime=${endTime}`
+    )
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function dayStatinfo(resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(
+      `${config.url}/api/stat/dayinfo`
+    )
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function topStatinfo(beginTime, endTime, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(
+      `${config.url}/api/stat/top?beginTime=${beginTime}&endTime=${endTime}`
+    )
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+
+
 export {
   siteInfo,
   myInfo,
@@ -328,6 +372,7 @@ export {
   updateToken,
   enableToken,
   fileList,
+  imagesList,
   fileInfoById,
   mkDir,
   fileInfo,
@@ -342,4 +387,7 @@ export {
   setSetting,
   myStatinfo,
   register,
+  visitDataStatinfo,
+  dayStatinfo,
+  topStatinfo
 };

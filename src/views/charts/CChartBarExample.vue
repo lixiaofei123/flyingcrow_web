@@ -1,7 +1,7 @@
 <template>
   <CChartBar
     :datasets="defaultDatasets"
-    labels="months"
+    :labels="labels"
   />
 </template>
 
@@ -12,12 +12,15 @@ export default {
   name: 'CChartBarExample',
   components: { CChartBar },
   computed: {
+    labels(){
+      return ['a','b','c','d','e','f','g','h','k','j']
+    },
     defaultDatasets () {
       return [
         {
-          label: 'GitHub Commits',
+          label: "ceshi",
           backgroundColor: '#f87979',
-          data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
+          data: [0,1,2,3,4,5,6,7,8,9]
         }
       ]
     }

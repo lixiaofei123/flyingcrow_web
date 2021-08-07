@@ -442,6 +442,39 @@ function totalStatinfo(time, beginTime, endTime, resolve, reject) {
     .catch((err) => reject(err));
 }
 
+function topStatinfo(beginTime, endTime, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(
+      `${config.url}/api/admin/stat/top?beginTime=${beginTime}&endTime=${endTime}`
+    )
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function visitDataStatinfo(beginTime, endTime, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(
+      `${config.url}/api/admin/stat/visitdata?beginTime=${beginTime}&endTime=${endTime}`
+    )
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function dayStatinfo(resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(
+      `${config.url}/api/admin/stat/dayinfo`
+    )
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
 export {
   storageList,
   findStorageById,
@@ -480,4 +513,7 @@ export {
   setGlobalSetting,
   userStatinfo,
   totalStatinfo,
+  topStatinfo,
+  visitDataStatinfo,
+  dayStatinfo
 };

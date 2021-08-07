@@ -25,7 +25,7 @@ export default {
     },
     dataPoints: {
       type: Array,
-      default: () => [10, 22, 34, 46, 58, 70, 46, 23, 45, 78, 34, 12]
+      default: () => [0,0,0,0,0,0,0]
     },
     label: {
       type: String,
@@ -76,8 +76,8 @@ export default {
               display: false,
               ticks: {
                 display: false,
-                min: Math.min.apply(Math, this.dataPoints) - 5,
-                max: Math.max.apply(Math, this.dataPoints) + 5
+                min: Math.min.apply(Math, this.dataPoints),
+                max: Math.max.apply(Math, this.dataPoints) + 10
               }
             }
           ]

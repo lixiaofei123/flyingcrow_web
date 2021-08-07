@@ -4,14 +4,26 @@ let admin_nav = [
     _children: [
       {
         _name: "CSidebarNavItem",
-        name: "主面板",
+        name: "站点面板",
         to: "/admin/dashboard",
+        icon: "cil-speedometer",
+      },
+      {
+        _name: "CSidebarNavItem",
+        name: "个人面板",
+        to: "/admin/userdashboard",
         icon: "cil-speedometer",
       },
       {
         _name: "CSidebarNavItem",
         name: "文件管理",
         to: "/admin/files",
+        icon: "cil-speedometer",
+      },
+      {
+        _name: "CSidebarNavItem",
+        name: "图片管理",
+        to: "/admin/images",
         icon: "cil-speedometer",
       },
       {
@@ -116,14 +128,20 @@ let user_nav = [
     _children: [
       {
         _name: "CSidebarNavItem",
-        name: "主面板",
-        to: "/admin/dashboard",
+        name: "个人面板",
+        to: "/admin/userdashboard",
         icon: "cil-speedometer",
       },
       {
         _name: "CSidebarNavItem",
         name: "文件管理",
         to: "/admin/files",
+        icon: "cil-speedometer",
+      },
+      {
+        _name: "CSidebarNavItem",
+        name: "图片管理",
+        to: "/admin/images",
         icon: "cil-speedometer",
       },
       {

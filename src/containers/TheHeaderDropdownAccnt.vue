@@ -36,7 +36,7 @@
         :status="trafficStatus"
       ></el-progress>
     </CDropdownHeader>
-    <CDropdownItem to="/admin/me"> <CIcon name="cil-user" /> 个人资料 </CDropdownItem>
+    <CDropdownItem to="/admin/my"> <CIcon name="cil-user" /> 个人资料 </CDropdownItem>
     <CDropdownItem to="/admin"> <CIcon name="cil-user" /> 控制台 </CDropdownItem>
     <CDropdownItem @click="$emit('logout')">
       <CIcon name="cil-lock-locked" /> 注销

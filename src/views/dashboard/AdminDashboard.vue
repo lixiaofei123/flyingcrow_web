@@ -124,38 +124,44 @@
             本月访问数据分析
           </CCardHeader>
           <CCardBody>
-            <CRow>
-              <CCol sm="12" md="12" lg="6" xl="6">
+            <CTabs>
+              <CTab title="浏览器" active>
                 <div class="piechar">
-                  <div class="title">浏览器统计</div>
-                  <CChartPie
+                  <CChartBar
                     :datasets="browserDatasets"
+                    :options="options"
                     :labels="browserLabels"
                   />
                 </div>
-              </CCol>
-              <CCol sm="12" md="12" lg="6" xl="6">
+              </CTab>
+              <CTab title="操作系统">
                 <div class="piechar">
-                  <div class="title">操作系统统计</div>
-                  <CChartPie :datasets="osDatasets" :labels="osLabels" />
+                  <CChartBar
+                    :options="options"
+                    :datasets="osDatasets"
+                    :labels="osLabels"
+                  />
                 </div>
-              </CCol>
-              <CCol sm="12" md="12" lg="6" xl="6">
+              </CTab>
+              <CTab title="来源IP">
                 <div class="piechar">
-                  <div class="title">访问者IP统计</div>
-                  <CChartDoughnut :datasets="ipDatasets" :labels="ipLabels" />
+                  <CChartBar
+                    :options="options"
+                    :datasets="ipDatasets"
+                    :labels="ipLabels"
+                  />
                 </div>
-              </CCol>
-              <CCol sm="12" md="12" lg="6" xl="6">
+              </CTab>
+              <CTab title="来源Referer">
                 <div class="piechar">
-                  <div class="title">Referer统计</div>
-                  <CChartDoughnut
+                  <CChartBar
+                    :options="options"
                     :datasets="refererDatasets"
                     :labels="refererLabels"
                   />
                 </div>
-              </CCol>
-            </CRow>
+              </CTab>
+            </CTabs>
           </CCardBody>
         </CCard>
       </CCol>
@@ -168,12 +174,12 @@
               </CCardHeader>
               <CCardBody>
                 <CDataTable
-                      :border="false"
-                      :small="true"
-                      :items="used_storages_data"
-                      :fields="used_storages_fields"
-                    >
-                    </CDataTable>
+                  :border="false"
+                  :small="true"
+                  :items="used_storages_data"
+                  :fields="used_storages_fields"
+                >
+                </CDataTable>
               </CCardBody>
             </CCard>
           </CCol>
@@ -184,12 +190,12 @@
               </CCardHeader>
               <CCardBody>
                 <CDataTable
-                      :border="false"
-                      :small="true"
-                      :items="used_traffic_data"
-                      :fields="used_traffic_fields"
-                    >
-                    </CDataTable>
+                  :border="false"
+                  :small="true"
+                  :items="used_traffic_data"
+                  :fields="used_traffic_fields"
+                >
+                </CDataTable>
               </CCardBody>
             </CCard>
           </CCol>
@@ -200,12 +206,12 @@
               </CCardHeader>
               <CCardBody>
                 <CDataTable
-                      :border="false"
-                      :small="true"
-                      :items="visit_file_data"
-                      :fields="visit_file_fields"
-                    >
-                    </CDataTable>
+                  :border="false"
+                  :small="true"
+                  :items="visit_file_data"
+                  :fields="visit_file_fields"
+                >
+                </CDataTable>
               </CCardBody>
             </CCard>
           </CCol>
@@ -217,7 +223,7 @@
 
 <script>
 import { CChartLineSimple } from "../charts/index.js";
-import { CChartPie, CChartDoughnut } from "@coreui/vue-chartjs";
+import { CChartBar } from "@coreui/vue-chartjs";
 
 import {
   totalStatinfo,
@@ -230,9 +236,14 @@ import { wellSize } from "../../utils/utils";
 
 export default {
   name: "AdminDashboard",
-  components: { CChartLineSimple, CChartPie, CChartDoughnut },
+  components: { CChartLineSimple, CChartBar },
   data() {
     return {
+      options: {
+        legend: {
+          display: false,
+        },
+      },
       stat: {
         usedStorage: 0,
         fileCount: 0,
@@ -241,18 +252,18 @@ export default {
         userCount: 0,
       },
       used_storages_fields: [
-        {key: "userName", label: "用户名"}, 
-        {key: "storageSize", label: "使用存储"}, 
+        { key: "userName", label: "用户名" },
+        { key: "storageSize", label: "使用存储" },
       ],
       used_storages_data: [],
       used_traffic_fields: [
-        {key: "userName", label: "用户名"}, 
-        {key: "trafficSize", label: "使用流量"}, 
+        { key: "userName", label: "用户名" },
+        { key: "trafficSize", label: "使用流量" },
       ],
       used_traffic_data: [],
       visit_file_fields: [
-        {key: "fileName", label: "文件名"}, 
-        {key: "visitCount", label: "访问次数"}, 
+        { key: "fileName", label: "文件名" },
+        { key: "visitCount", label: "访问次数" },
       ],
       visit_file_data: [],
       dayFileCount: [0, 0, 0, 0, 0, 0, 0],
@@ -341,40 +352,37 @@ export default {
         () => {}
       );
     },
-    loadTopUsedInfo(){
-       topStatinfo("", "",data=>{
-         if(data.code === 200){
-           let usedStorages = data.data.fileSize;
-           this.used_storages_data = []
-           for(let usedStorage of usedStorages){
-             this.used_storages_data.push({
-               userName: usedStorage.userName,
-               storageSize: wellSize(usedStorage.fileSize)
-             })
-           }
+    loadTopUsedInfo() {
+      topStatinfo("", "", (data) => {
+        if (data.code === 200) {
+          let usedStorages = data.data.fileSize;
+          this.used_storages_data = [];
+          for (let usedStorage of usedStorages) {
+            this.used_storages_data.push({
+              userName: usedStorage.userName,
+              storageSize: wellSize(usedStorage.fileSize),
+            });
+          }
 
+          let usedTraffics = data.data.traffic;
+          this.used_traffic_data = [];
+          for (let usedTraffic of usedTraffics) {
+            this.used_traffic_data.push({
+              userName: usedTraffic.userName,
+              trafficSize: wellSize(usedTraffic.trafficSize),
+            });
+          }
 
-           let usedTraffics = data.data.traffic;
-           this.used_traffic_data = []
-           for(let usedTraffic of usedTraffics){
-             this.used_traffic_data.push({
-               userName: usedTraffic.userName,
-               trafficSize: wellSize(usedTraffic.trafficSize)
-             })
-           }
-
-
-           let visitFiles = data.data.file;
-           this.visit_file_data = []
-           for(let visitFile of visitFiles){
-             this.visit_file_data.push({
-               fileName: visitFile.fileName,
-               visitCount: visitFile.visitCount
-             })
-           }
-
-         }
-       });
+          let visitFiles = data.data.file;
+          this.visit_file_data = [];
+          for (let visitFile of visitFiles) {
+            this.visit_file_data.push({
+              fileName: visitFile.fileName,
+              visitCount: visitFile.visitCount,
+            });
+          }
+        }
+      });
     },
     loadVisitData() {
       visitDataStatinfo(
@@ -439,25 +447,25 @@ export default {
     },
     loadStat() {
       totalStatinfo(
-          "month",
-          "",
-          "",
-          (data) => {
-            if (data.code === 200) {
-              this.stat = data.data;
-              this.loadDayInfo();
-              this.loadVisitData();
-              this.loadTopUsedInfo();
-            } else {
-            }
-          },
-          (data) => {
-            this.$notify.error({
-              title: "错误",
-              message: `获取统计信息失败，原因${data.reason}`,
-            });
+        "month",
+        "",
+        "",
+        (data) => {
+          if (data.code === 200) {
+            this.stat = data.data;
+            this.loadDayInfo();
+            this.loadVisitData();
+            this.loadTopUsedInfo();
+          } else {
           }
-        );
+        },
+        (data) => {
+          this.$notify.error({
+            title: "错误",
+            message: `获取统计信息失败，原因${data.reason}`,
+          });
+        }
+      );
     },
   },
 };
@@ -466,9 +474,8 @@ export default {
 <style scoped>
 .piechar {
   padding: 30px 20px;
-  
 }
-.title{
+.title {
   padding-bottom: 20px;
   text-align: center;
 }

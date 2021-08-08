@@ -51,6 +51,7 @@ export default {
   data() {
     return {
       detail: {
+        lastModifyTime: new Date().getTime() / 1000
       },
       showDrawer: this.drawer,
       direction: "rtl",

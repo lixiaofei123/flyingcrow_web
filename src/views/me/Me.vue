@@ -1,129 +1,129 @@
 <template>
-  <CRow>
-    <CCol col="12" lg="6">
-      <CCard>
-        <CCardHeader> {{ user.name }} 信息 </CCardHeader>
-        <CCardBody>
-          <CForm>
-            <CRow form class="form-group">
-              <CCol sm="3">
-                头像
-              </CCol>
-              <CCol sm="9">
-                <CRow>
-                  <CCol sm="12">
-                    <div class="c-avatar" style="width:80px;height:80px;">
-                      <img
-                        :src="user.avatar"
-                        class="c-avatar-img "
-                        onerror="this.src='img/default_avatar.png'"
-                      />
-                    </div>
-                    <el-upload
-                      class="upload-avatar"
-                      :action="uploadAction"
-                      name="file"
-                      multiple
-                      :limit="1"
-                      :show-file-list="false"
-                      :on-success="uploadAvatarSuccess"
-                      :before-upload="beforeAvatarUpload"
-                      :on-error="uploadAvatarError"
-                      :headers="headers"
-                      accept="image/png,image/jpeg"
-                    >
-                      <CButton class="btn" size="sm" color="primary"
+  <div>
+    <CRow>
+      <CCol col="12" lg="6">
+        <CCard>
+          <CCardHeader> {{ user.name }} 信息 </CCardHeader>
+          <CCardBody>
+            <CForm>
+              <CRow form class="form-group">
+                <CCol sm="3">
+                  头像
+                </CCol>
+                <CCol sm="9">
+                  <CRow>
+                    <CCol sm="12">
+                      <div class="c-avatar" style="width:80px;height:80px;">
+                        <img
+                          :src="user.avatar"
+                          class="c-avatar-img "
+                          onerror="this.src='img/default_avatar.png'"
+                        />
+                      </div>
+                      <br>
+                      <CButton
+                        class="btn"
+                        size="sm"
+                        color="primary"
+                        @click="selectFile"
                         >更换头像</CButton
                       >
-                      <span v-if="tipText" v-bind:style="{ color: tipColor }">{{
-                        tipText
-                      }}</span>
-                    </el-upload>
-                  </CCol>
-                </CRow>
-              </CCol>
-            </CRow>
-            <CInput
-              label="登录账号"
-              horizontal
-              :disabled="true"
-              v-model="user.name"
-            /><CInput label="昵称" horizontal v-model="user.nickName" />
-            <CTextarea label="心情" v-model="user.mood" horizontal rows="3" />
-            <CInput
-              label="用户组"
-              horizontal
-              :disabled="true"
-              v-model="user.groupName"
+                      <span :style="{color:tipColor}">&nbsp;&nbsp;{{tipText}}</span>
+                    </CCol>
+                  </CRow>
+                </CCol>
+              </CRow>
+              <CInput
+                label="登录账号"
+                horizontal
+                :disabled="true"
+                v-model="user.name"
+              /><CInput label="昵称" horizontal v-model="user.nickName" />
+              <CTextarea label="心情" v-model="user.mood" horizontal rows="3" />
+              <CInput
+                label="用户组"
+                horizontal
+                :disabled="true"
+                v-model="user.groupName"
+              />
+              <CInput label="邮箱" horizontal v-model="user.email" />
+              <CInput
+                label="用户角色"
+                horizontal
+                :disabled="true"
+                v-model="roleTypes[user.role]"
+              />
+              <CInput
+                label="存储配额"
+                type="number"
+                append="MB"
+                horizontal
+                v-model="user.storageQuota"
+                :disabled="true"
+              />
+              <CInput
+                label="流量配额"
+                type="number"
+                append="MB"
+                horizontal
+                v-model="user.trafficQuota"
+                :disabled="true"
+              />
+            </CForm>
+          </CCardBody>
+          <CCardFooter>
+            <CButton class="btn" color="primary" @click="updateUser"
+              >更新个人资料</CButton
+            >
+          </CCardFooter>
+        </CCard>
+      </CCol>
+      <CCol col="12" lg="6">
+        <CRow>
+          <CCol md="6">
+            <CWidgetProgress
+              :header="usedStorageQuotaText"
+              text="已使用存储"
+              :footer="usedStorageQuotaTip"
+              :color="usedStorageQuotaColor"
+              inverse
+              :value="usedStorageQuotaProgress"
             />
-            <CInput label="邮箱" horizontal v-model="user.email" />
-            <CInput
-              label="用户角色"
-              horizontal
-              :disabled="true"
-              v-model="roleTypes[user.role]"
+          </CCol>
+          <CCol md="6">
+            <CWidgetProgress
+              :header="usedTrafficQuotaText"
+              text="本月使用流量"
+              :footer="usedTrafficQuotaTip"
+              :color="usedTrafficQuotaColor"
+              inverse
+              :value="usedTrafficQuotaProgress"
             />
-            <CInput
-              label="存储配额"
-              type="number"
-              append="MB"
-              horizontal
-              v-model="user.storageQuota"
-              :disabled="true"
-            />
-            <CInput
-              label="流量配额"
-              type="number"
-              append="MB"
-              horizontal
-              v-model="user.trafficQuota"
-              :disabled="true"
-            />
-          </CForm>
-        </CCardBody>
-        <CCardFooter>
-          <CButton class="btn" color="primary" @click="updateUser"
-            >更新个人资料</CButton
-          >
-        </CCardFooter>
-      </CCard>
-    </CCol>
-    <CCol col="12" lg="6">
-      <CRow>
-        <CCol md="6">
-          <CWidgetProgress
-            :header="usedStorageQuotaText"
-            text="已使用存储"
-            :footer="usedStorageQuotaTip"
-            :color="usedStorageQuotaColor"
-            inverse
-            :value="usedStorageQuotaProgress"
-          />
-        </CCol>
-        <CCol md="6">
-          <CWidgetProgress
-            :header="usedTrafficQuotaText"
-            text="本月使用流量"
-            :footer="usedTrafficQuotaTip"
-            :color="usedTrafficQuotaColor"
-            inverse
-            :value="usedTrafficQuotaProgress"
-          />
-        </CCol>
-      </CRow>
-    </CCol>
-  </CRow>
+          </CCol>
+        </CRow>
+      </CCol>
+    </CRow>
+    <AvatarEditor
+      @cancel="showAvatarEditModel = false"
+      @avatar="selectAvatar"
+      :imageData="avatarBase64Str"
+      :show="showAvatarEditModel"
+    />
+  </div>
 </template>
 
 <script>
-import { myInfo, updateMyInfo } from "../../api/api";
+import { myInfo, updateMyInfo, uploadNoNameFile } from "../../api/api";
 import { wellSize } from "../../utils/utils";
+import AvatarEditor from "../base/AvatarEditor";
 var cookies = require("vue-cookie");
 
 export default {
   name: "Me",
+  components: { AvatarEditor },
   data() {
     return {
+      showAvatarEditModel: false,
       roleTypes: {
         user: "普通用户",
         admin: "管理员",
@@ -137,7 +137,8 @@ export default {
       tipColor: "green",
       tipText: "",
       uploadAction: "",
-      headers: {}
+      headers: {},
+      avatarBase64Str: "",
     };
   },
   created() {
@@ -204,20 +205,60 @@ export default {
     },
   },
   methods: {
-    beforeAvatarUpload(file) {
-      const isImage = file.type === "image/jpeg" || file.type === "image/png";
-      const isLt400K = file.size / 1024 / 1024 / 1024 < 400;
+    dataURLtoFile(dataurl, filename) {
+      var arr = dataurl.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
 
-      if (!isImage) {
-        this.uploadErrorInfo("上传头像图片只能是 JPG/PNG 格式!");
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
       }
-      if (!isLt400K) {
-        this.uploadErrorInfo("上传头像图片大小不能超过 400KB!");
-      }
 
-      this.headers["authorization"] = cookies.get("authorization");
-
-      return isImage && isLt400K;
+      return new File([u8arr], filename, { type: mime });
+    },
+    selectAvatar(base64Str) {
+      this.showAvatarEditModel = false
+      let file = this.dataURLtoFile(base64Str,"avatar.png")
+      uploadNoNameFile(
+        file,
+        () => {
+          
+        },
+        (data) => {
+          this.uploadAvatarSuccess(data);
+        },
+        (data) => {
+          let error = {
+            message: JSON.stringify(data),
+          };
+          this.uploadAvatarError();
+        }
+      );
+    },
+    selectFile() {
+      let that = this;
+      let fileInput = document.createElement("input");
+      fileInput.setAttribute("type", "file");
+      fileInput.setAttribute("style", "visibility:hidden");
+      fileInput.setAttribute("accept", "image/png,image/jpeg");
+      fileInput.addEventListener("change", function() {
+        if (this.files.length > 0) {
+          // 读取base64编码数据
+          let file = this.files[0];
+          let reader = new FileReader();
+          reader.onload = (event) => {
+            let base64Str = event.target.result;
+            that.avatarBase64Str = base64Str;
+            that.showAvatarEditModel = true;
+          };
+          reader.readAsDataURL(file);
+        }
+        document.body.removeChild(fileInput);
+      });
+      document.body.appendChild(fileInput);
+      fileInput.click();
     },
     uploadSuccessInfo(msg) {
       this.tipColor = "green";
@@ -227,14 +268,14 @@ export default {
       this.tipColor = "red";
       this.tipText = msg;
     },
-    uploadAvatarError(){
+    uploadAvatarError() {
       this.uploadErrorInfo("上传头像失败");
     },
     uploadAvatarSuccess(response) {
-      if(response.code === 200){
-        this.user.avatar = response.data.urls[0]
+      if (response.code === 200) {
+        this.user.avatar = response.data.urls[0];
       }
-      this.uploadSuccessInfo("图片上传成功，头像将在保存后生效")
+      this.uploadSuccessInfo("图片上传成功，头像将在保存后生效");
     },
     resetUser() {
       myInfo(

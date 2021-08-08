@@ -265,20 +265,20 @@ export default {
         this.storageProps = data.data;
         if (this.sid > 0) {
           this.resetStorage();
-          allCRList(
-            (data) => {
-              if (data.code === 200) {
-                this.crs = data.data;
-              }
-            },
-            (data) => {
-              this.$notify.error({
-                title: "错误",
-                message: `获取存储策略列表，原因${data.reason}`,
-              });
-            }
-          );
         }
+        allCRList(
+          (data) => {
+            if (data.code === 200) {
+              this.crs = data.data;
+            }
+          },
+          (data) => {
+            this.$notify.error({
+              title: "错误",
+              message: `获取存储策略列表，原因${data.reason}`,
+            });
+          }
+        );
       },
       (data) => {
         this.$notify.error({

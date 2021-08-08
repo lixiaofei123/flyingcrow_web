@@ -88,38 +88,44 @@
             本月访问数据分析
           </CCardHeader>
           <CCardBody>
-            <CRow>
-              <CCol sm="12" md="12" lg="6" xl="6">
+            <CTabs>
+              <CTab title="浏览器" active>
                 <div class="piechar">
-                  <div class="title">浏览器统计</div>
-                  <CChartPie
+                  <CChartBar
                     :datasets="browserDatasets"
+                    :options="options"
                     :labels="browserLabels"
                   />
                 </div>
-              </CCol>
-              <CCol sm="12" md="12" lg="6" xl="6">
+              </CTab>
+              <CTab title="操作系统">
                 <div class="piechar">
-                  <div class="title">操作系统统计</div>
-                  <CChartPie :datasets="osDatasets" :labels="osLabels" />
+                  <CChartBar
+                    :options="options"
+                    :datasets="osDatasets"
+                    :labels="osLabels"
+                  />
                 </div>
-              </CCol>
-              <CCol sm="12" md="12" lg="6" xl="6">
+              </CTab>
+              <CTab title="来源IP">
                 <div class="piechar">
-                  <div class="title">访问者IP统计</div>
-                  <CChartDoughnut :datasets="ipDatasets" :labels="ipLabels" />
+                  <CChartBar
+                    :options="options"
+                    :datasets="ipDatasets"
+                    :labels="ipLabels"
+                  />
                 </div>
-              </CCol>
-              <CCol sm="12" md="12" lg="6" xl="6">
+              </CTab>
+              <CTab title="来源Referer">
                 <div class="piechar">
-                  <div class="title">Referer统计</div>
-                  <CChartDoughnut
+                  <CChartBar
+                    :options="options"
                     :datasets="refererDatasets"
                     :labels="refererLabels"
                   />
                 </div>
-              </CCol>
-            </CRow>
+              </CTab>
+            </CTabs>
           </CCardBody>
         </CCard>
       </CCol>
@@ -151,7 +157,7 @@
 
 <script>
 import { CChartLineSimple } from "../charts/index.js";
-import { CChartPie, CChartDoughnut } from "@coreui/vue-chartjs";
+import { CChartBar } from "@coreui/vue-chartjs";
 
 import {
   myStatinfo,
@@ -164,9 +170,14 @@ import { wellSize } from "../../utils/utils";
 
 export default {
   name: "UserDashboard",
-  components: { CChartLineSimple, CChartPie, CChartDoughnut },
+  components: { CChartLineSimple, CChartBar },
   data() {
     return {
+      options: {
+        legend: {
+          display: false,
+        },
+      },
       stat: {
         usedStorage: 0,
         fileCount: 0,

@@ -168,10 +168,10 @@ export default {
               setTimeout(() => {
                 that.showUploadProgressBox = false;
               }, 3000);
-              document.body.removeChild(fileInput);
             }
           );
         }
+        document.body.removeChild(fileInput);
       });
       document.body.appendChild(fileInput);
       fileInput.click();

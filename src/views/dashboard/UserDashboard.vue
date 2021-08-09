@@ -83,6 +83,14 @@
     </CRow>
     <CRow>
       <CCol sm="12" md="12" lg="6" xl="6">
+        <CCard class="d-md-down-none">
+          <CCardHeader>
+            来源地域统计
+          </CCardHeader>
+          <CCardBody>
+            <ChinaMapChart :statData="regionStat" />
+          </CCardBody>
+        </CCard>
         <CCard>
           <CCardHeader>
             本月访问数据分析
@@ -156,6 +164,7 @@
 </template>
 
 <script>
+import ChinaMapChart from "../components/ChinaMapChart.vue"
 import { CChartLineSimple } from "../charts/index.js";
 import { CChartBar } from "@coreui/vue-chartjs";
 
@@ -164,13 +173,14 @@ import {
   visitDataStatinfo,
   dayStatinfo,
   topStatinfo,
+  regionStatinfo
 } from "../../api/api";
 
 import { wellSize } from "../../utils/utils";
 
 export default {
   name: "UserDashboard",
-  components: { CChartLineSimple, CChartBar },
+  components: { CChartLineSimple, CChartBar ,ChinaMapChart},
   data() {
     return {
       options: {
@@ -204,6 +214,7 @@ export default {
       ipDatasets: [],
       refererLabels: [],
       refererDatasets: [],
+      regionStat: [],
       colors: [
         "#DFFF00",
         "#FFBF00",
@@ -336,6 +347,13 @@ export default {
         () => {}
       );
     },
+    loadRegionStatinfo(){
+      regionStatinfo("","",data=>{
+        if(data.code === 200){
+          this.regionStat = data.data
+        }
+      },()=>{})
+    },
     loadTopUsedInfo() {
       topStatinfo("", "", (data) => {
         if (data.code === 200) {
@@ -358,6 +376,7 @@ export default {
         (data) => {
           if (data.code === 200) {
             this.stat = data.data;
+            this.loadRegionStatinfo()
             this.loadDayInfo();
             this.loadVisitData();
             this.loadTopUsedInfo();

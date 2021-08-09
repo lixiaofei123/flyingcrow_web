@@ -338,6 +338,17 @@ function visitDataStatinfo(beginTime, endTime, resolve, reject) {
     .catch((err) => reject(err));
 }
 
+function regionStatinfo(beginTime, endTime, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(
+      `${config.url}/api/stat/region?beginTime=${beginTime}&endTime=${endTime}`
+    )
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
 function dayStatinfo(resolve, reject) {
   resolve = resolve || function() {};
   reject = reject || function() {};
@@ -389,5 +400,6 @@ export {
   register,
   visitDataStatinfo,
   dayStatinfo,
-  topStatinfo
+  topStatinfo,
+  regionStatinfo
 };

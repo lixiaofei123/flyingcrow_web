@@ -1,5 +1,5 @@
 let globalConfig = {
-    url : "http://127.0.0.1:8080"
+    url : "https://res.lixf.cc"
 }
 
 window.globalConfig = globalConfig

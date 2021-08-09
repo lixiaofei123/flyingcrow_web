@@ -115,8 +115,7 @@
 <script>
 import { myInfo, updateMyInfo, uploadNoNameFile } from "../../api/api";
 import { wellSize } from "../../utils/utils";
-import AvatarEditor from "../base/AvatarEditor";
-var cookies = require("vue-cookie");
+import AvatarEditor from "../components/AvatarEditor";
 
 export default {
   name: "Me",

@@ -7,8 +7,24 @@
           <CCol md="12" v-for="img in bucket.items" v-bind:key="img.name">
             <CCard>
               <CCardHeader>
-                {{ img.name }}
+                <div style="display:flex">
+                  <div style="flex:1;"></div>
+                  <CDropdown :caret="false" style="width:40px;flex-shark:0">
+                    <template #toggler-content>
+                      <CIcon
+                        :height="25"
+                        :content="$options.freeSet.cilOptions"
+                      />
+                    </template>
+                    <CDropdownItem
+                      ><span style="color:red" @click="deleteFile0(bucket.id,img)"
+                        >删除</span
+                      ></CDropdownItem
+                    >
+                  </CDropdown>
+                </div>
               </CCardHeader>
+
               <CCardBody
                 style="cursor:pointer"
                 @click="showFileDrawer(img.absolutePath, img.name)"
@@ -38,16 +54,18 @@
 </template>
 
 <script>
-import { imagesList } from "../../api/api.js";
+import { imagesList, deleteFile } from "../../api/api.js";
 import { wellSize } from "../../utils/utils.js";
 import moment from "moment";
 import FileDetailDrawer from "../components/FileDetailDrawer";
+import { freeSet } from "@coreui/icons";
 
 export default {
   name: "Images",
   components: {
     FileDetailDrawer,
   },
+  freeSet,
   data() {
     return {
       showDrawer: false,
@@ -85,6 +103,43 @@ export default {
   },
   methods: {
     wellSize,
+    deleteFile0(bucketId,img) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          deleteFile(
+            img.fileId,
+            (data) => {
+              if (data.code === 200) {
+                this.$notify({
+                  title: "成功",
+                  message: `删除文件成功`,
+                  type: "success",
+                });
+               // 需要移除掉这个图片
+               let bucketIndex = this.buckets.findIndex(b => b.id === bucketId)
+               if(bucketIndex !== -1){
+                 let fileIndex = this.buckets[bucketIndex].items.findIndex(item=>item.fileId === img.fileId)
+                  if(fileIndex !== -1){
+                     this.buckets[bucketIndex].items.splice(fileIndex,1)
+                     this.buckets[bucketIndex].height -= img.imageHeight * (250 / img.imageWidth) + 120;
+                  }
+               }
+              }
+            },
+            (data) => {
+              this.$notify.error({
+                title: "错误",
+                message: `删除文件失败，原因${data.reason}`,
+              });
+            }
+          );
+        })
+        .catch(() => {});
+    },
     wellTime(time) {
       return moment(new Date(time * 1000)).format("YYYY-MM-DD HH:mm:ss");
     },

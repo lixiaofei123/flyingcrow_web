@@ -50,6 +50,8 @@
             <FileTable
               :items="files"
               @openDir="openDir"
+              @openImage="openImage"
+              @openVideo="openVideo"
               @fileInfo="fileInfo"
               @deleteFile="deleteFile0"
             ></FileTable>
@@ -62,6 +64,13 @@
       :drawer.sync="showDrawer"
       :path="path"
     ></FileDetailDrawer>
+
+    <el-image-viewer
+      v-if="visiableImg"
+      :on-close="()=>{ visiableImg = false }"
+      :url-list="sourceList"
+    />
+    <Video v-if="visiableVideo" :videoSrc="videoSrc" :mimeType="mimeType" style="z-index:9999" @closeVideo="closeVideo" />
 
     <div class="uploadProgressBox" v-if="showUploadProgressBox">
       上传文件
@@ -84,15 +93,24 @@ import { fileList, mkDir, uploadFile, deleteFile } from "../../api/api.js";
 import moment from "moment";
 import { wellSize } from "../../utils/utils";
 import FileDetailDrawer from "../components/FileDetailDrawer";
+import ElImageViewer from 'element-ui/packages/image/src/image-viewer';
+import Video from '../components/Video.vue'
+
 
 export default {
   name: "File",
   components: {
     FileTable,
     FileDetailDrawer,
+    ElImageViewer,
+    Video
   },
   data() {
     return {
+      visiableVideo: false,
+      videoSrc: '',
+      mimeType: 'video/mp4',
+      visiableImg: false,
       showDrawer: false,
       path: "",
       showUploadProgressBox: false,
@@ -108,6 +126,7 @@ export default {
       ],
       files: [],
       currentPath: "",
+      sourceList: []
     };
   },
   created: function() {
@@ -161,9 +180,9 @@ export default {
                 that.showUploadProgressBox = false;
               }, 3000);
 
-              document.body.removeChild(fileInput);
             },
-            () => {
+            data => {
+              console.log(data)
               that.upload.status = "exception";
               setTimeout(() => {
                 that.showUploadProgressBox = false;
@@ -171,9 +190,7 @@ export default {
             }
           );
         }
-        document.body.removeChild(fileInput);
       });
-      document.body.appendChild(fileInput);
       fileInput.click();
     },
     loadFiles(path) {
@@ -185,6 +202,7 @@ export default {
             this.resetFilecrumb(path);
             this.$router.push({ path: "files", query: { path: path } });
             this.files = [];
+            this.sourceList = [];
             for (let item of data.data) {
               this.files.push({
                 id: item.id,
@@ -196,7 +214,14 @@ export default {
                 isDict: item.isDict,
                 type: item.fileType,
                 fullPath: item.absolutePath + "/" + item.name,
+                iconUrl: item.fileType === "image" ?   item.iconUrls.length > 0 ? (item.iconUrls[0]) : "" : "",
+                url: item.urls[item.urls.length - 1],
+                mimeType: item.mimeType
               });
+
+              if(item.fileType === "image" && item.urls.length > 0){
+                this.sourceList.push(item.urls[item.urls.length - 1])
+              }
             }
           }
         },
@@ -207,6 +232,23 @@ export default {
           });
         }
       );
+    },
+    openImage(imgUrl){
+      let index = this.sourceList.findIndex(url => url === imgUrl)
+      if(index !== -1){
+        let temp =  this.sourceList.splice(0,index)
+        this.sourceList = this.sourceList.concat(temp)
+      }
+      this.visiableImg = true;
+    },
+    openVideo(url,mimeType){
+      this.videoSrc = url
+      this.mimeType = mimeType
+      this.visiableVideo = true
+    },
+    closeVideo(){
+      this.visiableVideo = false
+      this.videoSrc = ""
     },
     openDir(path) {
       this.loadFiles(path);

@@ -18,6 +18,7 @@
               <CInput :readonly="true" :value="url">
                 <template #append>
                   <CButton color="primary" @click="copyUrl(url)">复制</CButton>
+                  <CButton block color="link" target="_blank" :href="url">打开链接</CButton>
                 </template>
               </CInput>
             </CCol>

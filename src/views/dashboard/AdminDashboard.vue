@@ -119,59 +119,66 @@
     </CRow>
     <CRow>
       <CCol sm="12" md="12" lg="6" xl="6">
-        <CCard class="d-md-down-none">
-          <CCardHeader>
-            来源地域统计
-          </CCardHeader>
-          <CCardBody>
-            <ChinaMapChart :statData="regionStat" />
-          </CCardBody>
-        </CCard>
-        <CCard>
-          <CCardHeader>
-            本月访问数据分析
-          </CCardHeader>
-          <CCardBody>
-            <CTabs>
-              <CTab title="浏览器" active>
-                <div class="piechar">
-                  <CChartBar
-                    :datasets="browserDatasets"
-                    :options="options"
-                    :labels="browserLabels"
-                  />
-                </div>
-              </CTab>
-              <CTab title="操作系统">
-                <div class="piechar">
-                  <CChartBar
-                    :options="options"
-                    :datasets="osDatasets"
-                    :labels="osLabels"
-                  />
-                </div>
-              </CTab>
-              <CTab title="来源IP">
-                <div class="piechar">
-                  <CChartBar
-                    :options="options"
-                    :datasets="ipDatasets"
-                    :labels="ipLabels"
-                  />
-                </div>
-              </CTab>
-              <CTab title="来源Referer">
-                <div class="piechar">
-                  <CChartBar
-                    :options="options"
-                    :datasets="refererDatasets"
-                    :labels="refererLabels"
-                  />
-                </div>
-              </CTab>
-            </CTabs>
-          </CCardBody>
-        </CCard>
+        <CRow class="d-md-down-none">
+          <CCol md="12">
+            <CCard>
+              <CCardHeader>
+                来源地域统计
+              </CCardHeader>
+              <CCardBody>
+                <ChinaMapChart :statData="regionStat" />
+              </CCardBody>
+            </CCard>
+          </CCol>
+        </CRow>
+        <CRow  class="d-md-down-none">
+          <CCol md="12"
+            ><CCard>
+              <CCardHeader>
+                本月访问数据分析
+              </CCardHeader>
+              <CCardBody style="height:460px">
+                <CTabs>
+                  <CTab title="浏览器" active>
+                    <div class="piechar">
+                      <CChartBar
+                        :datasets="browserDatasets"
+                        :options="options"
+                        :labels="browserLabels"
+                      />
+                    </div>
+                  </CTab>
+                  <CTab title="操作系统">
+                    <div class="piechar">
+                      <CChartBar
+                        :options="options"
+                        :datasets="osDatasets"
+                        :labels="osLabels"
+                      />
+                    </div>
+                  </CTab>
+                  <CTab title="来源IP">
+                    <div class="piechar">
+                      <CChartBar
+                        :options="options"
+                        :datasets="ipDatasets"
+                        :labels="ipLabels"
+                      />
+                    </div>
+                  </CTab>
+                  <CTab title="来源Referer">
+                    <div class="piechar">
+                      <CChartBar
+                        :options="options"
+                        :datasets="refererDatasets"
+                        :labels="refererLabels"
+                      />
+                    </div>
+                  </CTab>
+                </CTabs>
+              </CCardBody> </CCard
+          ></CCol>
+        </CRow>
       </CCol>
       <CCol sm="12" md="12" lg="6" xl="6">
         <CRow>
@@ -230,7 +237,7 @@
 </template>
 
 <script>
-import ChinaMapChart from "../components/ChinaMapChart.vue"
+import ChinaMapChart from "../components/ChinaMapChart.vue";
 import { CChartLineSimple } from "../charts/index.js";
 import { CChartBar } from "@coreui/vue-chartjs";
 
@@ -239,14 +246,14 @@ import {
   topStatinfo,
   visitDataStatinfo,
   dayStatinfo,
-  regionStatinfo
+  regionStatinfo,
 } from "../../api/adminapi";
 
 import { wellSize } from "../../utils/utils";
 
 export default {
   name: "AdminDashboard",
-  components: { CChartLineSimple, CChartBar,ChinaMapChart },
+  components: { CChartLineSimple, CChartBar, ChinaMapChart },
   data() {
     return {
       options: {
@@ -456,12 +463,17 @@ export default {
         () => {}
       );
     },
-    loadRegionStatinfo(){
-      regionStatinfo("","",data=>{
-        if(data.code === 200){
-          this.regionStat = data.data
-        }
-      },()=>{})
+    loadRegionStatinfo() {
+      regionStatinfo(
+        "",
+        "",
+        (data) => {
+          if (data.code === 200) {
+            this.regionStat = data.data;
+          }
+        },
+        () => {}
+      );
     },
     loadStat() {
       totalStatinfo(
@@ -471,10 +483,10 @@ export default {
         (data) => {
           if (data.code === 200) {
             this.stat = data.data;
-            this.loadRegionStatinfo()
+            this.loadRegionStatinfo();
             this.loadDayInfo();
             this.loadVisitData();
-            this.loadTopUsedInfo();      
+            this.loadTopUsedInfo();
           } else {
           }
         },

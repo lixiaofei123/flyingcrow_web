@@ -8,7 +8,6 @@ const TheContainer = () => import("@/containers/TheContainer");
 const AdminDashboard = () => import("@/views/dashboard/AdminDashboard");
 const UserDashboard = () => import("@/views/dashboard/UserDashboard");
 
-
 const Storage = () => import("@/views/storage/Storage");
 const EditStorage = () => import("@/views/storage/EditStorage");
 
@@ -86,6 +85,11 @@ const Login = () => import("@/views/pages/Login");
 const Register = () => import("@/views/pages/Register");
 
 Vue.use(Router);
+
+const originalPush = Router.prototype.push;
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch((err) => err);
+};
 
 export default new Router({
   mode: "hash",

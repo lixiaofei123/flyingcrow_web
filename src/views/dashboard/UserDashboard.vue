@@ -95,7 +95,7 @@
           <CCardHeader>
             本月访问数据分析
           </CCardHeader>
-          <CCardBody>
+          <CCardBody class="d-md-down-none"  style="height:460px">
             <CTabs>
               <CTab title="浏览器" active>
                 <div class="piechar">

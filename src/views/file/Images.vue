@@ -1,5 +1,5 @@
 <template>
-  <div ref="main">
+  <div ref="main" class="main">
     <CPagination :active-page.sync="current" :pages="total"></CPagination>
     <CRow>
       <CCol md="3" v-for="bucket in buckets" v-bind:key="bucket.id">
@@ -29,7 +29,7 @@
                 style="cursor:pointer"
                 @click="showFileDrawer(img.absolutePath, img.name)"
               >
-                <img style="width:100%" :src="img.thumbUrl || img.url" />
+                <el-image style="width:100%" :src="img.thumbUrl || img.url" lazy></el-image>
               </CCardBody>
               <CCardFooter>
                 <div>大小: {{ wellSize(img.fileZise) }}</div>
@@ -218,4 +218,5 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

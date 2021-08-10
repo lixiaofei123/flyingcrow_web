@@ -18,7 +18,7 @@
         </CHeaderNavLink>
       </CHeaderNavItem>
       <CHeaderNavItem class="px-3">
-        <CHeaderNavLink to="/admin/me">
+        <CHeaderNavLink to="/admin/my">
           个人资料
         </CHeaderNavLink>
       </CHeaderNavItem>

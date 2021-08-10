@@ -7,7 +7,7 @@
     </div>
     <div class="table_line" v-for="item in items" v-bind:key="item.name">
       <div class="name" @click="openFile(item)">
-        <img class="fileicon" :src="fileIcon(item)" />
+        <el-image class="fileicon" :src="fileIcon(item)" ></el-image>
         <span style="vertical-align:middle;">{{ item.name }}</span>
       </div>
       <div class="opera">
@@ -47,15 +47,23 @@ export default {
     fileIcon(item) {
       if (item.isDict) {
         return "img/diricon.png";
-      } else {
+      } else if(item.type === 'image' && item.iconUrl != ""){
+        return item.iconUrl;
+      }else if(item.type === 'video'){
+        return "img/videoicon.png";
+      }else{
         return "img/fileicon.png";
       }
     },
     openFile(item) {
       if (item.isDict) {
         this.$emit("openDir", item.fullPath);
-      } else {
-        this.$emit("fileInfo", item.fullPath);
+      } else if(item.type === "image") {
+        this.$emit("openImage", item.url);
+      }else if(item.type === "video"){
+        this.$emit("openVideo", item.url,item.mimeType);
+      }else{
+         this.$emit("fileInfo", item.fullPath);
       }
     },
     deleteFile(item) {

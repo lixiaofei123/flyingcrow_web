@@ -38,7 +38,7 @@
     </CDropdownHeader>
     <CDropdownItem to="/admin/my"> <CIcon name="cil-user" /> 个人资料 </CDropdownItem>
     <CDropdownItem to="/admin"> <CIcon name="cil-user" /> 控制台 </CDropdownItem>
-    <CDropdownItem @click="$emit('logout')">
+    <CDropdownItem @click="logout0">
       <CIcon name="cil-lock-locked" /> 注销
     </CDropdownItem>
   </CDropdown>
@@ -46,6 +46,8 @@
 
 <script>
 import { wellSize } from "../utils/utils";
+import { logout } from "../api/api";
+
 export default {
   name: "TheHeaderDropdownAccnt",
   props: {
@@ -66,8 +68,16 @@ export default {
   },
   methods: {
     wellSize,
+    logout0(){
+      logout(data=>{
+        if(data.code === 200){
+          this.$emit('logout')
+        }
+      })
+    },
   },
   watch: {
+    
     stat() {
       this.totalStorage = this.user.storageQuota * 1024 * 1024;
       this.totalTraffic = this.user.trafficQuota * 1024 * 1024;

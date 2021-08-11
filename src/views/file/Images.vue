@@ -59,6 +59,8 @@ import { wellSize } from "../../utils/utils.js";
 import moment from "moment";
 import FileDetailDrawer from "../components/FileDetailDrawer";
 import { freeSet } from "@coreui/icons";
+var cookies = require("vue-cookie");
+
 
 export default {
   name: "Images",
@@ -68,6 +70,7 @@ export default {
   freeSet,
   data() {
     return {
+      authorization: "",
       showDrawer: false,
       limit: 20,
       current: 1,
@@ -99,6 +102,7 @@ export default {
     };
   },
   created: function() {
+    this.authorization = cookies.get("authorization")
     this.loadImages(1);
   },
   methods: {
@@ -189,7 +193,7 @@ export default {
             this.buckets[minHeightIndex].height +=
               item.imageHeight * (250 / item.imageWidth) + 120;
             this.buckets[minHeightIndex].items.push({
-              thumbUrl: item.thumbUrls[0],
+              thumbUrl: item.thumbUrls[0] + "?authorization=" + this.authorization,
               url: item.urls[0],
               name: item.name,
               absolutePath: item.absolutePath,

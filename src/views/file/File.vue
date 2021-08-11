@@ -95,6 +95,7 @@ import { wellSize } from "../../utils/utils";
 import FileDetailDrawer from "../components/FileDetailDrawer";
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer';
 import Video from '../components/Video.vue'
+var cookies = require("vue-cookie");
 
 
 export default {
@@ -107,6 +108,7 @@ export default {
   },
   data() {
     return {
+      authorization: "",
       visiableVideo: false,
       videoSrc: '',
       mimeType: 'video/mp4',
@@ -130,6 +132,7 @@ export default {
     };
   },
   created: function() {
+    this.authorization = cookies.get("authorization")
     let path = this.$route.query.path;
     if (path) {
       this.loadFiles(path);
@@ -214,7 +217,7 @@ export default {
                 isDict: item.isDict,
                 type: item.fileType,
                 fullPath: item.absolutePath + "/" + item.name,
-                iconUrl: item.fileType === "image" ?   item.iconUrls.length > 0 ? (item.iconUrls[0]) : "" : "",
+                iconUrl: item.fileType === "image" ?   item.iconUrls.length > 0 ? (item.iconUrls[0] + "?authorization=" + this.authorization) : "" : "",
                 url: item.urls[item.urls.length - 1],
                 mimeType: item.mimeType
               });

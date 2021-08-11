@@ -215,6 +215,16 @@ function login(username, password, resolve, reject) {
     .catch((err) => reject(err));
 }
 
+function logout(resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .post(`${config.url}/user/logout`)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+
 function register(username, email, password, resolve, reject) {
   resolve = resolve || function() {};
   reject = reject || function() {};
@@ -389,6 +399,7 @@ export {
   fileInfo,
   deleteFile,
   login,
+  logout,
   uploadFile,
   uploadNoNameFile,
   downloadTaskList,

@@ -1,7 +1,7 @@
 <template>
   <div>
     <CRow>
-      <CCol sm="12" md="12" lg="10" xl="6">
+      <CCol sm="12" md="12" lg="6" xl="6">
         <CCard>
           <CCardHeader>
             访问控制
@@ -166,7 +166,83 @@
               <CCol tag="label" sm="3" class="col-form-label"> </CCol>
               <CCol sm="6" md="4">
                 <CButton block color="primary" size="sm" @click="saveSetting"
-                  >保存配置</CButton
+                  >保存访问配置</CButton
+                >
+              </CCol>
+            </CRow>
+          </CCardBody>
+        </CCard>
+      </CCol>
+      <CCol sm="12" md="12" lg="6" xl="6">
+        <CCard>
+          <CCardHeader>
+            缓存控制
+          </CCardHeader>
+          <CCardBody>
+            <CForm>
+              <CRow form class="form-group">
+                <CCol tag="label" sm="3" class="col-form-label">
+                  开启缓存控制
+                </CCol>
+                <CCol sm="9">
+                  <CSwitch
+                    class="mr-1"
+                    :checked.sync="ccsettings.clientCacheEnable"
+                    color="primary"
+                  />
+                </CCol>
+              </CRow>
+              <CRow form class="form-group" v-if="ccsettings.clientCacheEnable">
+                <CCol sm="12">
+                  配置后缀以及缓存时间
+                  <CButton
+                    color="info"
+                    size="sm"
+                    class="float-right"
+                    style="width:120px"
+                    @click="addNewCCSetting"
+                    >新增</CButton
+                  >
+                  <div style="height:20px"></div>
+                </CCol>
+                <CCol
+                  sm="12"
+                  v-for="item in ccsettings.list"
+                  v-bind:key="item.index"
+                >
+                  <CRow>
+                    <CCol md="6">
+                      <CInput
+                        type="text"
+                        placeholder="后缀，用,号隔开"
+                        v-model="item.extensions"
+                      />
+                    </CCol>
+                    <CCol md="3">
+                      <CInput
+                        type="number"
+                        append="秒"
+                        v-model="item.expireTime"
+                      />
+                    </CCol>
+                    <CCol md="3">
+                      <CButton
+                        color="danger"
+                        style="width:100%"
+                        size="sm"
+                        @click="deleteCCSetting(item.index)"
+                        >删除</CButton
+                      >
+                    </CCol>
+                  </CRow>
+                </CCol>
+              </CRow>
+            </CForm>
+            <CRow form class="form-group">
+              <CCol tag="label" sm="3" class="col-form-label"> </CCol>
+              <CCol sm="6" md="4">
+                <CButton block color="primary" size="sm" @click="saveCCSetting"
+                  >保存缓存配置</CButton
                 >
               </CCol>
             </CRow>
@@ -203,6 +279,10 @@ export default {
         trafficPerDayPerIP: 0,
         beyondStrategy: "",
       },
+      ccsettings: {
+        clientCacheEnable: false,
+        list: [],
+      },
       beyondStrategy: {
         blacklist: "拉入黑名单",
         layAside: "不处理",
@@ -232,8 +312,92 @@ export default {
         });
       }
     );
+
+    getSetting(
+      "cc",
+      (data) => {
+        if (data.code === 200) {
+          this.ccsettings = {
+            clientCacheEnable: data.data.clientCacheEnable,
+            list: [],
+          };
+          if (data.data.list) {
+            for (let item of data.data.list) {
+              if (item.extensions !== "") {
+                this.ccsettings.list.push({
+                  extensions: item.extensions,
+                  expireTime: parseInt(item.expireTime),
+                });
+              }
+            }
+          }
+        }
+      },
+      (data) => {
+        this.$notify.error({
+          title: "错误",
+          message: `加载缓存控制配置出错，原因${data.reason}`,
+        });
+      }
+    );
   },
   methods: {
+    saveCCSetting() {
+      let setting = {
+        clientCacheEnable: this.ccsettings.clientCacheEnable,
+        list: [],
+      };
+      for (let item of this.ccsettings.list) {
+        if (item.extensions !== "") {
+          setting.list.push({
+            extensions: item.extensions,
+            expireTime: parseInt(item.expireTime),
+          });
+        }
+      }
+      setSetting(
+        "cc",
+        setting,
+        (data) => {
+          if (data.code === 200) {
+            this.$notify({
+              title: "成功",
+              message: `保存缓存控制配置成功`,
+              type: "success",
+            });
+          }
+        },
+        (data) => {
+          this.$notify.error({
+            title: "错误",
+            message: `保存缓存控制配置出错，原因${data.reason}`,
+          });
+        }
+      );
+    },
+    findListMaxIndex() {
+      let maxIndex = 0;
+      for (let item of this.ccsettings.list) {
+        if (item.index > maxIndex) {
+          maxIndex = item.index;
+        }
+      }
+      return maxIndex;
+    },
+    deleteCCSetting(index) {
+      let itemIndex = this.ccsettings.list.findIndex((i) => i.index === index);
+      if (itemIndex !== -1) {
+        this.ccsettings.list.splice(itemIndex, 1);
+      }
+    },
+    addNewCCSetting() {
+      let maxIndex = this.findListMaxIndex();
+      this.ccsettings.list.unshift({
+        index: maxIndex + 1,
+        extensions: "",
+        expireTime: 3600,
+      });
+    },
     saveSetting() {
       this.setting.trafficPerDayPerIP = parseInt(
         this.setting.trafficPerDayPerIP
@@ -261,7 +425,7 @@ export default {
         (data) => {
           this.$notify.error({
             title: "错误",
-            message: `保存其访问控制配置出错，原因${data.reason}`,
+            message: `保存访问控制配置出错，原因${data.reason}`,
           });
         }
       );

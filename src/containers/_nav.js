@@ -10,6 +10,12 @@ let admin_nav = [
       },
       {
         _name: "CSidebarNavItem",
+        name: "监控面板",
+        to: "/admin/monitor",
+        icon: "cil-speedometer",
+      },
+      {
+        _name: "CSidebarNavItem",
         name: "个人面板",
         to: "/admin/userdashboard",
         icon: "cil-speedometer",

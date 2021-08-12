@@ -275,7 +275,7 @@ export default {
           (data) => {
             this.$notify.error({
               title: "错误",
-              message: `获取存储策略列表，原因${data.reason}`,
+              message: `获取存储策略列表失败，原因${data.reason}`,
             });
           }
         );

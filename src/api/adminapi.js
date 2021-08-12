@@ -486,6 +486,85 @@ function dayStatinfo(resolve, reject) {
     .catch((err) => reject(err));
 }
 
+
+function monitorList( resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(`${config.url}/api/admin/monitor`)
+    .then((resp) => resolve(resp.data))
+    .catch(() => {
+      reject();
+    });
+}
+
+function allMonitorTypes(resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(`${config.url}/api/admin/monitor/all/types`)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function findMonitorById(sid, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(`${config.url}/api/admin/monitor/${sid}`)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function newMonitor(monitor, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .post(`${config.url}/api/admin/monitor`, monitor)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function updateMonitor(sid, monitor, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .put(`${config.url}/api/admin/monitor/${sid}`, monitor)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function deleteMonitor(sid, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .delete(`${config.url}/api/admin/monitor/${sid}`)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function activeMonitor(sid, active, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  var bodyFormData = new FormData();
+  bodyFormData.append("active", active);
+  axios
+    .post(`${config.url}/api/admin/monitor/active/${sid}`, bodyFormData)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function monitorData(sid, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(`${config.url}/api/admin/monitor/info/${sid}`)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+
+
 export {
   storageList,
   findStorageById,
@@ -527,5 +606,13 @@ export {
   topStatinfo,
   visitDataStatinfo,
   dayStatinfo,
-  regionStatinfo
+  regionStatinfo,
+  monitorList,
+  allMonitorTypes,
+  findMonitorById,
+  newMonitor,
+  updateMonitor,
+  deleteMonitor,
+  activeMonitor,
+  monitorData
 };

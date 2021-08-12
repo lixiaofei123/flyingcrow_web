@@ -7,6 +7,7 @@ const TheContainer = () => import("@/containers/TheContainer");
 // Views
 const AdminDashboard = () => import("@/views/dashboard/AdminDashboard");
 const UserDashboard = () => import("@/views/dashboard/UserDashboard");
+const Monitor = () => import("@/views/monitor/Monitor");
 
 const Storage = () => import("@/views/storage/Storage");
 const EditStorage = () => import("@/views/storage/EditStorage");
@@ -115,6 +116,11 @@ function configRoutes() {
           path: "userdashboard",
           name: "个人面板",
           component: UserDashboard,
+        },
+        {
+          path: "monitor",
+          name: "监控面板",
+          component: Monitor,
         },
         {
           path: "files",

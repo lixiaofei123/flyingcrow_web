@@ -15,7 +15,7 @@
           <template #toggler-content>
             <CIcon :height="25" :content="$options.freeSet.cilOptions" />
           </template>
-          <CDropdownItem v-if="!item.isDict" @click="openFile(item)"
+          <CDropdownItem v-if="!item.isDict" @click="openFileDetail(item)"
             >查看详情</CDropdownItem
           >
           <CDropdownItem
@@ -65,6 +65,9 @@ export default {
       }else{
          this.$emit("fileInfo", item.fullPath);
       }
+    },
+    openFileDetail(item){
+      this.$emit("fileInfo", item.fullPath);
     },
     deleteFile(item) {
       if (!item.isDict) {

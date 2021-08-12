@@ -4,7 +4,7 @@
       {{ title }}
     </CCardHeader>
     <CCardBody>
-      <CRow v-if="data.resourceData.length === 1">
+      <CRow v-if=" data.type === 'resource' && data.resourceData">
         <CCol md="6" style="text-align:center">
           <el-progress
             type="circle"
@@ -16,6 +16,15 @@
         <CCol md="6">
             <p>{{formatText}}</p>
             <p>{{tips}}</p>
+        </CCol>
+      </CRow>
+        <CRow v-if=" data.type === 'static' && data.staticData">
+        <CCol md="6" v-for="item in data.staticData" v-bind:key="item.name">
+            <CRow>
+                <CCol md="6"><b>{{item.name}}</b></CCol>
+                <CCol md="6">{{item.wellValue}}</CCol>
+            </CRow>
+            <div style="height:10px"></div>
         </CCol>
       </CRow>
     </CCardBody>

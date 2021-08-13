@@ -44,7 +44,7 @@
         </CCard>
       </CCol>
     </CRow>
-    <CModal :title="modalTitle" :show.sync="showEditUser">
+    <CModal :title="modalTitle" :show="showEditUser" :no-close-on-backdrop="true">
       <CForm>
         <CInput
           label="用户名"

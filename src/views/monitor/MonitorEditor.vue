@@ -1,5 +1,5 @@
 <template>
-  <CModal :title="title" :show.sync="show">
+  <CModal :title="title" :show="show" :no-close-on-backdrop="true">
     <CForm>
       <CInput label="名称" horizontal v-model="monitor.name" />
       <CRow form class="form-group">
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { allMonitorTypes, newMonitor } from "../../api/adminapi";
+import { allMonitorTypes, newMonitor,updateMonitor } from "../../api/adminapi";
 import { deepCopy } from "../../utils/utils";
 
 export default {
@@ -92,13 +92,32 @@ export default {
   },
   methods: {
     submitMonitor() {
-      newMonitor(deepCopy(this.monitor),data=>{
-        if(data.code === 200){
-          this.$emit("success",data.data)
-        }
-      },data=>{
-         this.$emit("error",data.readon)
-      })
+      if (this.monitor.id === -1) {
+        newMonitor(
+          deepCopy(this.monitor),
+          (data) => {
+            if (data.code === 200) {
+              this.$emit("success", data.data);
+            }
+          },
+          (data) => {
+            this.$emit("error", data.readon);
+          }
+        );
+      } else {
+        updateMonitor(
+          this.monitor.id,
+          deepCopy(this.monitor),
+          (data) => {
+            if (data.code === 200) {
+              this.$emit("updateSuccess", data.data);
+            }
+          },
+          (data) => {
+            this.$emit("updateError", data.readon);
+          }
+        );
+      }
     },
   },
   computed: {

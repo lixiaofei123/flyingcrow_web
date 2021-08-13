@@ -30,7 +30,7 @@
         </CCard>
       </CCol>
     </CRow>
-    <CModal :title="modalTitle" :show.sync="showEditToken">
+    <CModal :title="modalTitle" :show="showEditToken" :no-close-on-backdrop="true">
       <CForm>
         <CRow form class="form-group">
           <CCol sm="3">

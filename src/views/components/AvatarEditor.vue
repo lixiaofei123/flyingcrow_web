@@ -1,5 +1,5 @@
 <template>
-  <CModal title="编辑头像" :show.sync="show">
+  <CModal title="编辑头像" :show="show" :no-close-on-backdrop="true">
     <div
       style="text-align:center"
       :style="{

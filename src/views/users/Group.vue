@@ -84,7 +84,7 @@
         </CCard>
       </CCol>
     </CRow>
-    <CModal title="添加组成员" :show.sync="showModal">
+    <CModal title="添加组成员" :show="showModal" :no-close-on-backdrop="true">
       <div style="text-align:center">
         <el-autocomplete
           class="inline-input"

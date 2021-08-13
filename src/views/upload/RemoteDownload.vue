@@ -31,7 +31,7 @@
         </CCard>
       </CCol>
     </CRow>
-    <CModal :title="modalTitle" :show.sync="showModal">
+    <CModal :title="modalTitle" :show="showModal" :no-close-on-backdrop="true">
       <CRow class="form-group">
         <CCol tag="label" sm="3" md="3">
           任务ID

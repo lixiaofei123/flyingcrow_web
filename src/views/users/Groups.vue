@@ -43,7 +43,7 @@
         </CCard>
       </CCol>
     </CRow>
-    <CModal :title="modalTitle" :show.sync="showEditGroup">
+    <CModal :title="modalTitle" :show="showEditGroup" :no-close-on-backdrop="true">
       <CForm>
         <CInput label="组名" horizontal v-model="group.name" />
         <CInput

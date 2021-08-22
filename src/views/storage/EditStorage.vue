@@ -129,6 +129,21 @@
               </CRow>
               <CRow form class="form-group">
                 <CCol tag="label" sm="3" class="col-form-label">
+                  关联鉴权策略
+                </CCol>
+                <CCol sm="9" class="form-inline">
+                  <CInputCheckbox
+                    v-for="(v,k) in justifys"
+                    :key="k"
+                    :label="v.name"
+                    :value="k"
+                    :checked.sync="v.checked"
+                    :inline="true"
+                  />
+                </CCol>
+              </CRow>
+              <CRow form class="form-group">
+                <CCol tag="label" sm="3" class="col-form-label">
                   外部访问链接
                 </CCol>
                 <CCol sm="9">
@@ -193,14 +208,31 @@
           </CCardHeader>
           <CCardBody>
             <CForm v-show="storage.type">
-              <CInput
-                v-for="item in properties"
-                v-bind:key="item.name"
-                :label="item.showName"
-                v-model="storage.config[item.name]"
-                horizontal
-                :disabled="readonly"
-              />
+              <div v-for="item in properties" v-bind:key="item.name">
+                <CInput
+                  v-if="item.type === 'string'"
+                  :label="item.showName"
+                  v-model="storage.config[item.name]"
+                  :description="item.description"
+                  horizontal
+                  :disabled="readonly"
+                />
+                <CRow form class="form-group" v-if="item.type === 'bool'">
+                  <CCol tag="label" sm="3" class="col-form-label">
+                    {{ item.showName }}
+                  </CCol>
+                  <CCol sm="9">
+                    <CSwitch
+                      class="mr-1"
+                      :checked.sync="storage.config[item.name]"
+                      color="primary"
+                    /><br />
+                    <span v-if="item.description" style="font-size:12px">{{
+                      item.description
+                    }}</span>
+                  </CCol>
+                </CRow>
+              </div>
             </CForm>
           </CCardBody>
         </CCard>
@@ -216,6 +248,7 @@ import {
   updateStorage,
   allCRList,
   allStorageTypes,
+  allJustifyList,
 } from "../../api/adminapi";
 import { deepCopy } from "../../utils/utils";
 
@@ -244,9 +277,11 @@ export default {
         capacity: 0,
         storagePermission: "private",
         config: {},
+        justifys: [],
       },
       storageProps: {},
       crs: [],
+      justifys: {},
     };
   },
   created: function() {
@@ -263,9 +298,7 @@ export default {
         }
 
         this.storageProps = data.data;
-        if (this.sid > 0) {
-          this.resetStorage();
-        }
+
         allCRList(
           (data) => {
             if (data.code === 200) {
@@ -276,6 +309,28 @@ export default {
             this.$notify.error({
               title: "错误",
               message: `获取存储策略列表失败，原因${data.reason}`,
+            });
+          }
+        );
+        allJustifyList(
+          (data) => {
+            if (data.code === 200) {
+              for(let item of data.data){
+                this.justifys[item.id] = {
+                  name: item.name,
+                  checked: false
+                }
+              }
+            }
+
+            if (this.sid > 0) {
+              this.resetStorage();
+            }
+          },
+          (data) => {
+            this.$notify.error({
+              title: "错误",
+              message: `获取CDN鉴权策略列表失败，原因${data.reason}`,
             });
           }
         );
@@ -295,6 +350,11 @@ export default {
         (data) => {
           if (data.code === 200) {
             this.storage = data.data;
+            if(this.storage.justifys){
+              for(let jid of this.storage.justifys){
+                this.justifys[jid].checked = true
+              }
+            }
           }
         },
         (data) => {
@@ -327,6 +387,13 @@ export default {
     },
     submitStorage() {
       this.storage.capacity = parseInt(this.storage.capacity);
+      this.storage.justifys = []
+      for(let key of Object.keys(this.justifys)){
+        if(this.justifys[key].checked){
+          this.storage.justifys.push(parseInt(key))
+        }
+      }
+      
 
       if (this.sid <= 0) {
         newStorage(

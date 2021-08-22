@@ -210,6 +210,76 @@ function defaultCR(sid, setDefault, resolve, reject) {
     .catch((err) => reject(err));
 }
 
+
+function justifyList(page, limit, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(`${config.url}/api/admin/justify?page=${page}&limit=${limit}`)
+    .then((resp) => resolve(resp.data))
+    .catch(() => {
+      reject();
+    });
+}
+
+function allJustifyList(resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(`${config.url}/api/admin/justify/all`)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function allJustifyTypes(resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(`${config.url}/api/admin/justify/all/types`)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function findJustifyById(sid, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .get(`${config.url}/api/admin/justify/${sid}`)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function newJustify(justify, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  justify.acConfig.limitTime = parseInt(justify.acConfig.limitTime)
+  justify.acConfig.maxRequestPerIPSec = parseInt(justify.acConfig.maxRequestPerIPSec)
+  axios
+    .post(`${config.url}/api/admin/justify`, justify)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function updateJustify(sid, justify, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  justify.acConfig.limitTime = parseInt(justify.acConfig.limitTime)
+  justify.acConfig.maxRequestPerIPSec = parseInt(justify.acConfig.maxRequestPerIPSec)
+  axios
+    .put(`${config.url}/api/admin/justify/${sid}`, justify)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
+function deleteJustify(sid, resolve, reject) {
+  resolve = resolve || function() {};
+  reject = reject || function() {};
+  axios
+    .delete(`${config.url}/api/admin/justify/${sid}`)
+    .then((resp) => resolve(resp.data))
+    .catch((err) => reject(err));
+}
+
 function userList(query, page, limit, resolve, reject) {
   resolve = resolve || function() {};
   reject = reject || function() {};
@@ -479,15 +549,12 @@ function dayStatinfo(resolve, reject) {
   resolve = resolve || function() {};
   reject = reject || function() {};
   axios
-    .get(
-      `${config.url}/api/admin/stat/dayinfo`
-    )
+    .get(`${config.url}/api/admin/stat/dayinfo`)
     .then((resp) => resolve(resp.data))
     .catch((err) => reject(err));
 }
 
-
-function monitorList( resolve, reject) {
+function monitorList(resolve, reject) {
   resolve = resolve || function() {};
   reject = reject || function() {};
   axios
@@ -563,8 +630,6 @@ function monitorData(sid, resolve, reject) {
     .catch((err) => reject(err));
 }
 
-
-
 export {
   storageList,
   findStorageById,
@@ -583,6 +648,13 @@ export {
   defaultCR,
   allCRList,
   allCRTypes,
+  justifyList,
+  findJustifyById,
+  newJustify,
+  updateJustify,
+  deleteJustify,
+  allJustifyList,
+  allJustifyTypes,
   userList,
   findUserById,
   findFreeUser,
@@ -614,5 +686,5 @@ export {
   updateMonitor,
   deleteMonitor,
   activeMonitor,
-  monitorData
+  monitorData,
 };

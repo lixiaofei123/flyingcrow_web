@@ -71,7 +71,7 @@ function myStatinfo(time, beginTime, endTime, resolve, reject) {
   reject = reject || function() {};
   axios
     .get(
-      `${config.url}/api/stat/?time=${time}&beginTime=${beginTime}&endTime=${endTime}`
+      `${config.url}/api/stat?time=${time}&beginTime=${beginTime}&endTime=${endTime}`
     )
     .then((resp) => resolve(resp.data))
     .catch((err) => reject(err));

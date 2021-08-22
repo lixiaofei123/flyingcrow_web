@@ -250,7 +250,7 @@ export default {
             if (data.code === 200) {
               this.$notify({
                 title: "成功",
-                message: `更新新用户【${data.data.name}】成功`,
+                message: `更新用户【${data.data.name}】成功`,
                 type: "success",
               });
 

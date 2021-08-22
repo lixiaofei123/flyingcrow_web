@@ -15,6 +15,9 @@ const EditStorage = () => import("@/views/storage/EditStorage");
 const CR = () => import("@/views/storage/CR");
 const EditCR = () => import("@/views/storage/EditCR");
 
+const Justify = () => import("@/views/storage/Justify");
+const EditJustify = () => import("@/views/storage/EditJustify");
+
 const File = () => import("@/views/file/File");
 const Images = () => import("@/views/file/Images");
 
@@ -237,6 +240,35 @@ function configRoutes() {
               path: "show/:id",
               name: "查看审核策略",
               component: EditCR,
+            },
+          ],
+        },
+        {
+          path: "justifys",
+          redirect: "/admin/justifys",
+          meta: {
+            label: "CDN鉴权",
+          },
+          component: {
+            render(c) {
+              return c("router-view");
+            },
+          },
+          children: [
+            {
+              path: "",
+              name: "CDN鉴权列表",
+              component: Justify,
+            },
+            {
+              path: "edit/:id",
+              name: "新增/编辑鉴权策略",
+              component: EditJustify,
+            },
+            {
+              path: "show/:id",
+              name: "查看鉴权策略",
+              component: EditJustify,
             },
           ],
         },

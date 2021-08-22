@@ -62,6 +62,10 @@ let admin_nav = [
             name: "内容审核策略",
             to: "/admin/crs",
           },
+          {
+            name: "CDN鉴权策略",
+            to: "/admin/justifys",
+          },
         ],
       },
       {

@@ -179,6 +179,7 @@ function mkDir(path, resolve, reject) {
 function fileInfo(path, resolve, reject) {
   resolve = resolve || function() {};
   reject = reject || function() {};
+  path = encodeURIComponent(path)
   axios
     .get(`${config.url}/api/file/file?path=${path}`)
     .then((resp) => resolve(resp.data))

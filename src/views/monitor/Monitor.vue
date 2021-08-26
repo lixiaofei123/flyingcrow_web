@@ -20,7 +20,7 @@
     </CRow>
     <MonitorEditor
       :show="showMonitorEditor"
-      :monitor="monitor"
+      :monitorId="monitorId"
       @cancel="cancleEditor"
       @success="addMonitorSuccess"
       @error="addMonitorError"
@@ -44,14 +44,8 @@ export default {
   data() {
     return {
       showMonitorEditor: false,
-      monitor: {
-        id: -1,
-        name: "",
-        active: true,
-        type: "lighthouseTrafficPackage",
-        config: {},
-      },
       monitorList: [],
+      monitorId: -1,
     };
   },
   created: function() {
@@ -101,7 +95,7 @@ export default {
     editMonitor(mid) {
       let index = this.monitorList.findIndex((m) => m.id === mid);
       if (index !== -1) {
-        this.monitor = this.monitorList[index];
+        this.monitorId = this.monitorList[index].id;
         this.showMonitorEditor = true;
       }
     },
@@ -121,13 +115,7 @@ export default {
       );
     },
     addNewMonitor() {
-      this.monitor = {
-        id: -1,
-        name: "",
-        active: true,
-        type: "lighthouseTrafficPackage",
-        config: {},
-      };
+      this.monitorId = -1
       this.showMonitorEditor = true;
     },
     cancleEditor() {

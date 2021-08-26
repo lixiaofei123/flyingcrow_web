@@ -43,6 +43,7 @@
           v-bind:key="item.name"
           :label="item.showName"
           v-model="monitor.config[item.name]"
+           :description="item.description + (item.secret ? '(此为机密参数，隐藏不显示)' : '') "
           horizontal
         />
       </CForm>
@@ -55,14 +56,14 @@
 </template>
 
 <script>
-import { allMonitorTypes, newMonitor,updateMonitor } from "../../api/adminapi";
+import { allMonitorTypes, newMonitor,updateMonitor,findMonitorById } from "../../api/adminapi";
 import { deepCopy } from "../../utils/utils";
 
 export default {
   name: "MonitorEditor",
   props: {
     show: Boolean,
-    monitor: Object,
+    monitorId: Number,
   },
   components: {},
   data() {
@@ -70,6 +71,7 @@ export default {
       title: "新增监视器",
       monitorTypes: {},
       monitorProps: {},
+      monitor: {}
     };
   },
   created: function() {
@@ -127,6 +129,17 @@ export default {
         : this.monitorProps[this.monitor.type].properties;
     },
   },
+  watch: {
+    monitorId(newVal){
+      findMonitorById(newVal,data=>{
+        if(data.code === 200){
+          this.monitor = data.data
+        }
+      },data=>{
+
+      })
+    }
+  }
 };
 </script>
 

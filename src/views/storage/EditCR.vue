@@ -147,7 +147,7 @@
                 v-for="item in properties"
                 v-bind:key="item.name"
                 :label="item.showName"
-                :description="item.description + (item.secret ? '(此为机密参数，隐藏不显示)' : '') "
+                :description="item.description + (item.secret ? '(此为机密参数，数据已加密)' : '') "
                 horizontal
                 v-model="cr.config[item.name]"
                 :disabled="readonly"

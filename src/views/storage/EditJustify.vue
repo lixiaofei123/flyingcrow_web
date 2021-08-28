@@ -113,7 +113,7 @@
                   v-if="item.type === 'string'"
                   :label="item.showName"
                   v-model="justify.config[item.name]"
-                   :description="item.description + (item.secret ? '(此为机密参数，隐藏不显示)' : '') "
+                   :description="item.description + (item.secret ? '(此为机密参数，数据已加密)' : '') "
                   :disabled="readonly"
                   horizontal
                 />

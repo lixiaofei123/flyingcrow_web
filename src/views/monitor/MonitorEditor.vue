@@ -43,7 +43,9 @@
           v-bind:key="item.name"
           :label="item.showName"
           v-model="monitor.config[item.name]"
-           :description="item.description + (item.secret ? '(此为机密参数，隐藏不显示)' : '') "
+          :description="
+            item.description + (item.secret ? '(此为机密参数，数据已加密)' : '')
+          "
           horizontal
         />
       </CForm>
@@ -56,7 +58,12 @@
 </template>
 
 <script>
-import { allMonitorTypes, newMonitor,updateMonitor,findMonitorById } from "../../api/adminapi";
+import {
+  allMonitorTypes,
+  newMonitor,
+  updateMonitor,
+  findMonitorById,
+} from "../../api/adminapi";
 import { deepCopy } from "../../utils/utils";
 
 export default {
@@ -71,7 +78,12 @@ export default {
       title: "新增监视器",
       monitorTypes: {},
       monitorProps: {},
-      monitor: {}
+      monitor: {
+        id: -1,
+        type: "lighthouseTrafficPackage",
+        active: true,
+        config: {},
+      },
     };
   },
   created: function() {
@@ -130,16 +142,27 @@ export default {
     },
   },
   watch: {
-    monitorId(newVal){
-      findMonitorById(newVal,data=>{
-        if(data.code === 200){
-          this.monitor = data.data
-        }
-      },data=>{
-
-      })
-    }
-  }
+    monitorId(newVal) {
+      if (newVal !== -1) {
+        findMonitorById(
+          newVal,
+          (data) => {
+            if (data.code === 200) {
+              this.monitor = data.data;
+            }
+          },
+          (data) => {}
+        );
+      } else {
+        this.monitor = {
+          id: -1,
+          type: "lighthouseTrafficPackage",
+          active: true,
+          config: {},
+        };
+      }
+    },
+  },
 };
 </script>
 

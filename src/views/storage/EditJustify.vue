@@ -80,6 +80,15 @@
                 :disabled="readonly"
                 v-model="justify.acConfig.limitTime"
               />
+               <CInput
+                label="总访问频次限制"
+                append="每小时"
+                description="每小时请求总次数，小于0不限制"
+                type="number"
+                horizontal
+                :disabled="readonly"
+                v-model="justify.acConfig.totalMaxRequestPerHour"
+              />
             </CForm>
             <CRow form class="form-group">
               <CCol tag="label" sm="3" class="col-form-label">

@@ -39,7 +39,7 @@ window.onload = () => {
           registerButton.style.display = "inline-block"
         }
         loginButton.style.display = "inline-block"
-        
+
         if (uploadInfo.allowAnonymousUpload) {
           addUploadEventListener();
           showUploadTips(uploadInfo.allowFileExtension, uploadInfo.maxFileSize)
@@ -77,7 +77,7 @@ function resetUI(ui) {
   let siteTitle = ui.siteTitle
 
   if(bgIsImage && bgImage){
-    document.getElementById("fullscreen").style.background = 'url('+ bgImage + ')'
+    document.getElementById("fullscreen").style.backgroundImage = 'url('+ bgImage + ')'
   }else if(bgColor){
     document.getElementById("fullscreen").style.background = bgColor
   }

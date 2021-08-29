@@ -254,6 +254,8 @@ function newJustify(justify, resolve, reject) {
   reject = reject || function() {};
   justify.acConfig.limitTime = parseInt(justify.acConfig.limitTime)
   justify.acConfig.maxRequestPerIPSec = parseInt(justify.acConfig.maxRequestPerIPSec)
+  justify.acConfig.totalMaxRequestPerHour = parseInt(justify.acConfig.totalMaxRequestPerHour)
+
   axios
     .post(`${config.url}/api/admin/justify`, justify)
     .then((resp) => resolve(resp.data))
@@ -265,6 +267,7 @@ function updateJustify(sid, justify, resolve, reject) {
   reject = reject || function() {};
   justify.acConfig.limitTime = parseInt(justify.acConfig.limitTime)
   justify.acConfig.maxRequestPerIPSec = parseInt(justify.acConfig.maxRequestPerIPSec)
+  justify.acConfig.totalMaxRequestPerHour = parseInt(justify.acConfig.totalMaxRequestPerHour)
   axios
     .put(`${config.url}/api/admin/justify/${sid}`, justify)
     .then((resp) => resolve(resp.data))

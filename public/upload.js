@@ -38,10 +38,10 @@ window.onload = () => {
         if (siteinfo.allowRegister) {
           registerButton.style.display = "inline-block"
         }
-
+        loginButton.style.display = "inline-block"
+        
         if (uploadInfo.allowAnonymousUpload) {
           addUploadEventListener();
-          loginButton.style.display = "inline-block"
           showUploadTips(uploadInfo.allowFileExtension, uploadInfo.maxFileSize)
           uploadMaxFileSize = uploadInfo.maxFileSize * 1024 * 1024
           allowUploadFileExtension = uploadInfo.allowFileExtension

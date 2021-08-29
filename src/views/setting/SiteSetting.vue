@@ -334,10 +334,10 @@ export default {
   },
   methods: {
     uploadLogoImageSuccess(resp) {
-      this.setting.logo = resp.data.urls[resp.data.urls.length - 1];
+      this.setting.logo = resp.data.urls[0];
     },
     uploadBgImageSuccess(resp) {
-      this.setting.bgImage = resp.data.urls[resp.data.urls.length - 1];
+      this.setting.bgImage = resp.data.urls[0];
     },
     loadAllGroups() {
       groupAll(

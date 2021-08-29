@@ -8,6 +8,12 @@
           </CCardHeader>
           <CCardBody>
             <CForm>
+              <CInput
+                label="站点标题"
+                type="text"
+                v-model="setting.siteTitle"
+                horizontal
+              />
               <CRow form class="form-group">
                 <CCol tag="label" sm="3" class="col-form-label">
                   允许注册
@@ -38,30 +44,30 @@
                   description="新用户默认每月流量"
                 />
                 <CRow form class="form-group">
-          <CCol sm="3">
-            用户组
-          </CCol>
-          <CCol sm="9">
-            <CRow>
-              <CCol sm="12">
-                <select
-                  class="form-control"
-                  v-model="setting.registerConfig.groupId"
-                  style="width:100%"
-                >
-                  <option :value="-1">不设置组</option>
+                  <CCol sm="3">
+                    用户组
+                  </CCol>
+                  <CCol sm="9">
+                    <CRow>
+                      <CCol sm="12">
+                        <select
+                          class="form-control"
+                          v-model="setting.registerConfig.groupId"
+                          style="width:100%"
+                        >
+                          <option :value="-1">不设置组</option>
 
-                  <option
-                    v-for="group in groups"
-                    v-bind:key="group.id"
-                    :value="group.id"
-                    >{{ group.name }}</option
-                  >
-                </select>
-              </CCol>
-            </CRow>
-          </CCol>
-        </CRow>
+                          <option
+                            v-for="group in groups"
+                            v-bind:key="group.id"
+                            :value="group.id"
+                            >{{ group.name }}</option
+                          >
+                        </select>
+                      </CCol>
+                    </CRow>
+                  </CCol>
+                </CRow>
               </div>
               <CTextarea
                 label="上传页欢迎语"
@@ -71,9 +77,16 @@
                 rows="3"
               />
               <CInput
+                label="法律声明"
+                type="text"
+                v-model="setting.legalStatement"
+                description="此句话会在底部左侧显示"
+                horizontal
+              />
+              <CInput
                 label="备案号"
                 type="text"
-                v-model="setting.ipc"
+                v-model="setting.icp"
                 horizontal
               />
             </CForm>
@@ -88,27 +101,221 @@
           </CCardBody>
         </CCard>
       </CCol>
+      <CCol sm="12" md="12" lg="10" xl="6">
+        <CCard>
+          <CCardHeader>
+            页面UI设计
+          </CCardHeader>
+          <CCardBody>
+            <CForm>
+              <ImageUploader
+                :imageUrl="setting.logo"
+                @uploadImageSuccess="uploadLogoImageSuccess"
+                :uploadUrl="uploadAction"
+                :maxFilesize="500"
+                label="LOGO"
+                title="站点LOGO"
+              ></ImageUploader>
+              <CRow form class="form-group">
+                <CCol tag="label" sm="3" class="col-form-label">
+                  背景为图片
+                </CCol>
+                <CCol sm="9">
+                  <CSwitch
+                    class="mr-1"
+                    :checked.sync="setting.bgIsImage"
+                    color="primary"
+                  />
+                </CCol>
+              </CRow>
+              <ImageUploader
+                v-if="setting.bgIsImage"
+                :imageUrl="setting.bgImage"
+                @uploadImageSuccess="uploadBgImageSuccess"
+                :uploadUrl="uploadAction"
+                :maxFilesize="2000"
+                label="背景图片"
+                title="背景图片"
+              ></ImageUploader>
+              <CRow form class="form-group" v-if="!setting.bgIsImage">
+                <CCol sm="3">
+                  背景颜色
+                </CCol>
+                <CCol sm="9">
+                  <CRow>
+                    <CCol sm="12">
+                      <el-color-picker
+                        v-model="setting.bgColor"
+                      ></el-color-picker>
+                    </CCol>
+                  </CRow>
+                </CCol>
+              </CRow>
+              <CRow form class="form-group">
+                <CCol sm="3">
+                  导航栏背景色
+                </CCol>
+                <CCol sm="9">
+                  <CRow>
+                    <CCol sm="12">
+                      <el-color-picker
+                        v-model="setting.navBarBgColor"
+                         show-alpha
+                      ></el-color-picker>
+                    </CCol>
+                  </CRow>
+                </CCol>
+              </CRow>
+              <CRow form class="form-group">
+                <CCol sm="3">
+                  导航栏文字颜色
+                </CCol>
+                <CCol sm="9">
+                  <CRow>
+                    <CCol sm="12">
+                      <el-color-picker
+                        v-model="setting.navBarTextColor"
+                      ></el-color-picker>
+                    </CCol>
+                  </CRow>
+                </CCol>
+              </CRow>
+              <CRow form class="form-group">
+                <CCol sm="3">
+                  欢迎框背景色
+                </CCol>
+                <CCol sm="9">
+                  <CRow>
+                    <CCol sm="12">
+                      <el-color-picker
+                        v-model="setting.welcomeTextBGColor"
+                         show-alpha
+                      ></el-color-picker>
+                    </CCol>
+                  </CRow>
+                </CCol>
+              </CRow>
+              <CRow form class="form-group">
+                <CCol sm="3">
+                  欢迎框文字颜色
+                </CCol>
+                <CCol sm="9">
+                  <CRow>
+                    <CCol sm="12">
+                      <el-color-picker
+                        v-model="setting.welcomeTextColor"
+                      ></el-color-picker>
+                    </CCol>
+                  </CRow>
+                </CCol>
+              </CRow>
+              <CRow form class="form-group">
+                <CCol sm="3">
+                  上传框背景色
+                </CCol>
+                <CCol sm="9">
+                  <CRow>
+                    <CCol sm="12">
+                      <el-color-picker
+                        v-model="setting.uploadBoxBgColor"
+                         show-alpha
+                      ></el-color-picker>
+                    </CCol>
+                  </CRow>
+                </CCol>
+              </CRow>
+              <CRow form class="form-group">
+                <CCol sm="3">
+                  上传框文字颜色
+                </CCol>
+                <CCol sm="9">
+                  <CRow>
+                    <CCol sm="12">
+                      <el-color-picker
+                        v-model="setting.uploadBoxTextColor"
+                      ></el-color-picker>
+                    </CCol>
+                  </CRow>
+                </CCol>
+              </CRow>
+              <CRow form class="form-group">
+                <CCol sm="3">
+                  脚部框背景色
+                </CCol>
+                <CCol sm="9">
+                  <CRow>
+                    <CCol sm="12">
+                      <el-color-picker
+                        v-model="setting.footBarBGColor"
+                         show-alpha
+                      ></el-color-picker>
+                    </CCol>
+                  </CRow>
+                </CCol>
+              </CRow>
+              <CRow form class="form-group">
+                <CCol sm="3">
+                  脚部框文字颜色
+                </CCol>
+                <CCol sm="9">
+                  <CRow>
+                    <CCol sm="12">
+                      <el-color-picker
+                        v-model="setting.footBarTextColor"
+                      ></el-color-picker>
+                    </CCol>
+                  </CRow>
+                </CCol>
+              </CRow>
+            </CForm>
+          </CCardBody>
+        </CCard>
+      </CCol>
     </CRow>
   </div>
 </template>
 
 <script>
-import { getGlobalSetting, setGlobalSetting,groupAll } from "../../api/adminapi";
+import {
+  getGlobalSetting,
+  setGlobalSetting,
+  groupAll,
+} from "../../api/adminapi";
+
+import ImageUploader from "../components/ImageUploader.vue";
 
 export default {
   name: "SiteSetting",
-  components: {},
+  components: {
+    ImageUploader,
+  },
   data() {
     return {
+      uploadAction: "",
       setting: {
         allowRegister: false,
         welcomeText: "",
-        ipc: "",
+        icp: "",
+        allowRegister: false,
+        bgColor: "",
+        bgImage: "",
+        bgIsImage: false,
+        footBarTextColor: "",
+        footBarBGColor: "",
+        logo: "",
+        navBarBgColor: "",
+        navBarTextColor: "",
+        uploadBoxBgColor: "",
+        uploadBoxTextColor: "",
+        welcomeTextBGColor: "",
+        welcomeTextColor: "",
       },
-      groups:[]
+      groups: [],
     };
   },
   created: function() {
+    this.uploadAction = `${window.globalConfig.url}/file/upload`;
+
     this.loadAllGroups();
     getGlobalSetting(
       "site",
@@ -126,6 +333,12 @@ export default {
     );
   },
   methods: {
+    uploadLogoImageSuccess(resp) {
+      this.setting.logo = resp.data.urls[resp.data.urls.length - 1];
+    },
+    uploadBgImageSuccess(resp) {
+      this.setting.bgImage = resp.data.urls[resp.data.urls.length - 1];
+    },
     loadAllGroups() {
       groupAll(
         (data) => {
@@ -139,8 +352,12 @@ export default {
       );
     },
     saveSetting() {
-      this.setting.registerConfig.storageSize = parseInt(this.setting.registerConfig.storageSize)
-      this.setting.registerConfig.trafficPerMonth = parseInt(this.setting.registerConfig.trafficPerMonth)
+      this.setting.registerConfig.storageSize = parseInt(
+        this.setting.registerConfig.storageSize
+      );
+      this.setting.registerConfig.trafficPerMonth = parseInt(
+        this.setting.registerConfig.trafficPerMonth
+      );
       setGlobalSetting(
         "site",
         this.setting,

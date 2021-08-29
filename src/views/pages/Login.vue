@@ -39,7 +39,7 @@
                     </CCol>
                     <CCol col="6" class="text-right">
                       <!-- CButton color="link" class="px-0">忘记密码?</CButton -->
-                      <CButton color="link" class="px-0" v-if="allowRegister"
+                      <CButton color="link" class="px-0" v-if="allowRegister" to="/register" 
                         >立即注册!</CButton
                       >
                     </CCol>
@@ -58,7 +58,7 @@
                   name="logo"
                   height="80"
                   alt="Logo"
-                  src="img/logo_white.png"
+                  :src="require('@/assets/image/logo_white.png')"
                 />
                 <div style="height:20px;"></div>
                 <h5>飞鸦-提供稳定高效的在线文件服务</h5>
@@ -98,7 +98,7 @@ export default {
           if (data.code === 200) {
             let token = data.message;
             cookies.set("authorization", token, 6);
-            this.$router.push({ path: `/index` });
+            window.location.href = "/"
           }
         },
         () => {

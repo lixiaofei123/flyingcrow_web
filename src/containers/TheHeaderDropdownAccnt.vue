@@ -11,7 +11,6 @@
           <img
             :src="user.avatar"
             class="c-avatar-img "
-            onerror="this.src='img/default_avatar.png'"
           />
         </div>
       </CHeaderNavLink>
@@ -36,8 +35,8 @@
         :status="trafficStatus"
       ></el-progress>
     </CDropdownHeader>
-    <CDropdownItem to="/admin/my"> <CIcon name="cil-user" /> 个人资料 </CDropdownItem>
-    <CDropdownItem to="/admin"> <CIcon name="cil-user" /> 控制台 </CDropdownItem>
+    <CDropdownItem to="/my"> <CIcon name="cil-user" /> 个人资料 </CDropdownItem>
+    <CDropdownItem to="/"> <CIcon name="cil-user" /> 控制台 </CDropdownItem>
     <CDropdownItem @click="logout0">
       <CIcon name="cil-lock-locked" /> 注销
     </CDropdownItem>

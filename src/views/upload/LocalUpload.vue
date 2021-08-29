@@ -182,7 +182,7 @@ export default {
       let uid = file.uid;
       let index = this.uploads.findIndex((u) => u.uid === uid);
       if (index !== -1) {
-        this.uploads[index].url = "img/fileicon.png";
+        this.uploads[index].url = require("@/assets/image/fileicon.png");
         this.$set(this.uploads, index, this.uploads[index]);
       }
     },

@@ -13,18 +13,18 @@
 
     <CHeaderNav class="d-md-down-none">
       <CHeaderNavItem class="px-3">
-        <CHeaderNavLink to="/index">
+        <CHeaderNavLink onclick="window.location.href='/'">
           首页
         </CHeaderNavLink>
       </CHeaderNavItem>
       <CHeaderNavItem class="px-3">
-        <CHeaderNavLink to="/admin/my">
+        <CHeaderNavLink to="/my">
           个人资料
         </CHeaderNavLink>
       </CHeaderNavItem>
     </CHeaderNav>
     <CHeaderBrand class="mx-auto" to="/">
-      <img name="logo" height="40" alt="Logo" src="img/logo_main.png" />
+      <img name="logo" height="40" alt="Logo" :src="require('@/assets/image/logo_main.png')" />
     </CHeaderBrand>
     <CHeaderNav class="mr-4">
       <CHeaderNavItem class="d-md-down-none mx-2">
@@ -62,7 +62,7 @@ export default {
     logout() {
       cookies.set("authorization", "");
       this.stat = {};
-      window.location = "#/index";
+      window.location = "/";
     },
   },
   components: {

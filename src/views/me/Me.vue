@@ -17,7 +17,6 @@
                         <img
                           :src="user.avatar"
                           class="c-avatar-img "
-                          onerror="this.src='img/default_avatar.png'"
                         />
                       </div>
                       <br>

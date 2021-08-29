@@ -46,13 +46,13 @@ export default {
   methods: {
     fileIcon(item) {
       if (item.isDict) {
-        return "img/diricon.png";
+        return require("@/assets/image/diricon.png");
       } else if(item.type === 'image' && item.iconUrl != ""){
         return item.iconUrl;
       }else if(item.type === 'video'){
-        return "img/videoicon.png";
+        return require("@/assets/image/videoicon.png");
       }else{
-        return "img/fileicon.png";
+        return require("@/assets/image/fileicon.png");
       }
     },
     openFile(item) {

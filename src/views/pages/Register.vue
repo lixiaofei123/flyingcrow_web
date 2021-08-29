@@ -129,7 +129,7 @@ export default {
               let token = data.message;
               cookies.set("authorization", token, 6);
               setTimeout(() => {
-                this.$router.push({ path: `/index` });
+                window.location.href = "/"
               }, 5000);
             }
           },

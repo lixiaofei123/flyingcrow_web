@@ -1,10 +1,8 @@
 import Vue from "vue";
 import Router from "vue-router";
 
-// Containers
 const TheContainer = () => import("@/containers/TheContainer");
 
-// Views
 const AdminDashboard = () => import("@/views/dashboard/AdminDashboard");
 const UserDashboard = () => import("@/views/dashboard/UserDashboard");
 const Monitor = () => import("@/views/monitor/Monitor");
@@ -23,7 +21,6 @@ const Images = () => import("@/views/file/Images");
 
 const Token = () => import("@/views/token/Token");
 
-// Users
 const Users = () => import("@/views/users/Users");
 const User = () => import("@/views/users/User");
 const Groups = () => import("@/views/users/Groups");
@@ -47,7 +44,6 @@ const Typography = () => import("@/views/theme/Typography");
 const Charts = () => import("@/views/charts/Charts");
 const Widgets = () => import("@/views/widgets/Widgets");
 
-// Views - Components
 const Cards = () => import("@/views/base/Cards");
 const Forms = () => import("@/views/base/Forms");
 const Switches = () => import("@/views/base/Switches");
@@ -65,24 +61,19 @@ const Popovers = () => import("@/views/base/Popovers");
 const ProgressBars = () => import("@/views/base/ProgressBars");
 const Tooltips = () => import("@/views/base/Tooltips");
 
-// Views - Buttons
 const StandardButtons = () => import("@/views/buttons/StandardButtons");
 const ButtonGroups = () => import("@/views/buttons/ButtonGroups");
 const Dropdowns = () => import("@/views/buttons/Dropdowns");
 const BrandButtons = () => import("@/views/buttons/BrandButtons");
 
-// Views - Icons
 const CoreUIIcons = () => import("@/views/icons/CoreUIIcons");
 const Brands = () => import("@/views/icons/Brands");
 const Flags = () => import("@/views/icons/Flags");
 
-// Views - Notifications
 const Alerts = () => import("@/views/notifications/Alerts");
 const Badges = () => import("@/views/notifications/Badges");
 const Modals = () => import("@/views/notifications/Modals");
 
-// Views - Pages
-const Index = () => import("@/views/pages/Index1");
 const Page404 = () => import("@/views/pages/Page404");
 const Page500 = () => import("@/views/pages/Page500");
 const Login = () => import("@/views/pages/Login");
@@ -105,8 +96,8 @@ export default new Router({
 function configRoutes() {
   return [
     {
-      path: "/admin",
-      redirect: "/admin/dashboard",
+      path: "/",
+      redirect: "/dashboard",
       name: "主页",
       component: TheContainer,
       children: [
@@ -163,7 +154,7 @@ function configRoutes() {
         },
         {
           path: "upload",
-          redirect: "/admin/upload/local",
+          redirect: "/upload/local",
           meta: {
             label: "上传",
           },
@@ -187,7 +178,7 @@ function configRoutes() {
         },
         {
           path: "storages",
-          redirect: "/admin/storages",
+          redirect: "/storages",
           meta: {
             label: "存储",
           },
@@ -216,7 +207,7 @@ function configRoutes() {
         },
         {
           path: "crs",
-          redirect: "/admin/crs",
+          redirect: "/crs",
           meta: {
             label: "审核策略",
           },
@@ -245,7 +236,7 @@ function configRoutes() {
         },
         {
           path: "justifys",
-          redirect: "/admin/justifys",
+          redirect: "/justifys",
           meta: {
             label: "CDN鉴权",
           },
@@ -275,7 +266,7 @@ function configRoutes() {
 
         {
           path: "users",
-          redirect: "/admin/users/list",
+          redirect: "/users/list",
           meta: {
             label: "用户",
           },
@@ -320,7 +311,7 @@ function configRoutes() {
         },
         {
           path: "setting",
-          redirect: "/admin/setting/upload",
+          redirect: "/setting/upload",
           meta: {
             label: "系统设置",
           },
@@ -349,7 +340,7 @@ function configRoutes() {
         },
         {
           path: "my",
-          redirect: "/admin/my",
+          redirect: "/my",
           meta: {
             label: "个人设置",
           },
@@ -589,37 +580,22 @@ function configRoutes() {
       ],
     },
     {
-      path: "/",
-      redirect: "/index",
+      path: "/login",
+      redirect: "/login",
       name: "Pages",
       component: {
         render(c) {
           return c("router-view");
         },
       },
-      children: [
+      children: [,
         {
-          path: "index",
-          name: "首页",
-          component: Index,
-        },
-        {
-          path: "404",
-          name: "Page404",
-          component: Page404,
-        },
-        {
-          path: "500",
-          name: "Page500",
-          component: Page500,
-        },
-        {
-          path: "login",
+          path: "/login",
           name: "Login",
           component: Login,
         },
         {
-          path: "register",
+          path: "/register",
           name: "Register",
           component: Register,
         },

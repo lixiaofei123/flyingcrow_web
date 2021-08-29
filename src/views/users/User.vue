@@ -16,7 +16,6 @@
                       <img
                         :src="user.avatar"
                         class="c-avatar-img "
-                        onerror="this.src='img/default_avatar.png'"
                       />
                     </div>
                   </CCol>
@@ -282,7 +281,7 @@ export default {
     goBack() {
       this.usersOpened
         ? this.$router.go(-1)
-        : this.$router.push({ path: "/admin/users/list" });
+        : this.$router.push({ path: "/users/list" });
     },
     editUser() {
       this.readonly = false;

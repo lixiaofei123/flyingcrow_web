@@ -5,126 +5,126 @@ let admin_nav = [
       {
         _name: "CSidebarNavItem",
         name: "站点面板",
-        to: "/admin/dashboard",
+        to: "/dashboard",
         icon: "cil-speedometer",
       },
       {
         _name: "CSidebarNavItem",
         name: "监控面板",
-        to: "/admin/monitor",
+        to: "/monitor",
         icon: "cil-speedometer",
       },
       {
         _name: "CSidebarNavItem",
         name: "个人面板",
-        to: "/admin/userdashboard",
+        to: "/userdashboard",
         icon: "cil-speedometer",
       },
       {
         _name: "CSidebarNavItem",
         name: "文件管理",
-        to: "/admin/files",
+        to: "/files",
         icon: "cil-speedometer",
       },
       {
         _name: "CSidebarNavItem",
         name: "图片管理",
-        to: "/admin/images",
+        to: "/images",
         icon: "cil-speedometer",
       },
       {
         _name: "CSidebarNavDropdown",
         name: "上传",
-        route: "/admin/upload",
+        route: "/upload",
         icon: "cil-puzzle",
         items: [
           {
             name: "本地上传",
-            to: "/admin/upload/local",
+            to: "/upload/local",
           },
           {
             name: "远程下载",
-            to: "/admin/upload/remote",
+            to: "/upload/remote",
           },
         ],
       },
       {
         _name: "CSidebarNavDropdown",
         name: "存储",
-        route: "/admin/storages",
+        route: "/storages",
         icon: "cil-puzzle",
         items: [
           {
             name: "存储策略",
-            to: "/admin/storages",
+            to: "/storages",
           },
           {
             name: "内容审核策略",
-            to: "/admin/crs",
+            to: "/crs",
           },
           {
             name: "CDN鉴权策略",
-            to: "/admin/justifys",
+            to: "/justifys",
           },
         ],
       },
       {
         _name: "CSidebarNavDropdown",
         name: "用户",
-        route: "/admin/users",
+        route: "/users",
         icon: "cil-puzzle",
         items: [
           {
             name: "用户",
-            to: "/admin/users/list",
+            to: "/users/list",
           },
           {
             name: "用户组",
-            to: "/admin/users/groups",
+            to: "/users/groups",
           },
           {
             name: "授权码",
-            to: "/admin/users/tokens",
+            to: "/users/tokens",
           },
         ],
       },
       {
         _name: "CSidebarNavDropdown",
         name: "系统设置",
-        route: "/admin/setting",
+        route: "/setting",
         icon: "cil-puzzle",
         items: [
           {
             name: "传输设置",
-            to: "/admin/setting/upload",
+            to: "/setting/upload",
           },
           {
             name: "站点设置",
-            to: "/admin/setting/site",
+            to: "/setting/site",
           },
           {
             name: "其它设置",
-            to: "/admin/setting/other",
+            to: "/setting/other",
           },
         ],
       },
       {
         _name: "CSidebarNavDropdown",
         name: "个人设置",
-        route: "/admin/my",
+        route: "/my",
         icon: "cil-puzzle",
         items: [
           {
             name: "个人资料",
-            to: "/admin/my",
+            to: "/my",
           },
           {
             name: "水印设置",
-            to: "/admin/my/marker",
+            to: "/my/marker",
           },
           {
             name: "访问控制",
-            to: "/admin/my/ac",
+            to: "/my/ac",
           },
         ],
       },
@@ -139,60 +139,60 @@ let user_nav = [
       {
         _name: "CSidebarNavItem",
         name: "个人面板",
-        to: "/admin/userdashboard",
+        to: "/userdashboard",
         icon: "cil-speedometer",
       },
       {
         _name: "CSidebarNavItem",
         name: "文件管理",
-        to: "/admin/files",
+        to: "/files",
         icon: "cil-speedometer",
       },
       {
         _name: "CSidebarNavItem",
         name: "图片管理",
-        to: "/admin/images",
+        to: "/images",
         icon: "cil-speedometer",
       },
       {
         _name: "CSidebarNavDropdown",
         name: "上传",
-        route: "/admin/upload",
+        route: "/upload",
         icon: "cil-puzzle",
         items: [
           {
             name: "本地上传",
-            to: "/admin/upload/local",
+            to: "/upload/local",
           },
           {
             name: "远程下载",
-            to: "/admin/upload/remote",
+            to: "/upload/remote",
           },
         ],
       },
       {
         _name: "CSidebarNavItem",
         name: "授权码",
-        to: "/admin/users/tokens",
+        to: "/users/tokens",
         icon: "cil-speedometer",
       },
       {
         _name: "CSidebarNavDropdown",
         name: "个人设置",
-        route: "/admin/my",
+        route: "/my",
         icon: "cil-puzzle",
         items: [
           {
             name: "个人资料",
-            to: "/admin/my",
+            to: "/my",
           },
           {
             name: "水印设置",
-            to: "/admin/my/marker",
+            to: "/my/marker",
           },
           {
             name: "访问控制",
-            to: "/admin/my/ac",
+            to: "/my/ac",
           },
         ],
       },

@@ -203,7 +203,7 @@ export default {
     goBack() {
       this.usersOpened
         ? this.$router.go(-1)
-        : this.$router.push({ path: "/admin/justifys" });
+        : this.$router.push({ path: "/justifys" });
     },
     submitJustify() {
       if (this.justify.id === -1) {

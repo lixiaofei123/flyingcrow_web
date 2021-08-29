@@ -250,7 +250,7 @@ export default {
     goBack() {
       this.usersOpened
         ? this.$router.go(-1)
-        : this.$router.push({ path: "/admin/crs" });
+        : this.$router.push({ path: "/crs" });
     },
     submitCR() {
       this.cr.capacity = parseInt(this.cr.capacity);

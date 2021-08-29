@@ -56,12 +56,12 @@ export default {
       },
       showDrawer: this.drawer,
       direction: "rtl",
-      imgUrl: "img/loadding.png"
+      imgUrl: require("@/assets/image/loadding.png")
     };
   },
   watch: {
     path(newval) {
-      this.imgUrl = "img/loadding.png"
+      this.imgUrl =  require("@/assets/image/loadding.png")
       this.loadFileInfo(newval);
     },
     drawer(newval){

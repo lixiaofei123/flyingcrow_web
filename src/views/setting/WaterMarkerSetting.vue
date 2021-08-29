@@ -168,46 +168,14 @@
                 </CRow>
               </div>
               <div v-if="setting.watermark && setting.type === 1">
-                <CRow form class="form-group">
-                  <CCol tag="label" sm="3" class="col-form-label">
-                    水印图片
-                  </CCol>
-                  <CCol sm="9">
-                    <CRow>
-                      <CCol sm="12">
-                        <div class="c-WaterImg" style="width:80px;height:80px;">
-                          <img
-                            :height="50"
-                            :src="waterImg"
-                            onerror="this.src='img/default_avatar.png'"
-                          />
-                        </div>
-                        <el-upload
-                          class="upload-WaterImg"
-                          :action="uploadAction"
-                          name="file"
-                          multiple
-                          :limit="1"
-                          :show-file-list="false"
-                          :on-success="uploadWaterImgSuccess"
-                          :before-upload="beforeWaterImgUpload"
-                          :on-error="uploadWaterImgError"
-                          :headers="headers"
-                          accept="image/png,image/jpeg"
-                        >
-                          <CButton class="btn" size="sm" color="primary"
-                            >更换图片</CButton
-                          >
-                          <span
-                            v-if="tipText"
-                            v-bind:style="{ color: tipColor }"
-                            >{{ tipText }}</span
-                          >
-                        </el-upload>
-                      </CCol>
-                    </CRow>
-                  </CCol>
-                </CRow>
+                <ImageUploader
+                  :imageUrl="waterImg"
+                  @uploadImageSuccess="uploadMarkerImageSuccess"
+                  :uploadUrl="uploadAction"
+                  :maxFilesize="500"
+                  label="水印"
+                  title="水印图片"
+                ></ImageUploader>
                 <CRow form class="form-group">
                   <CCol sm="3">
                     缩放比例
@@ -249,7 +217,7 @@
                 <div class="preview">
                   <img
                     id="watermark_bg"
-                    src="/img/demo.png"
+                    :src="require('@/assets/image/demo.png')"
                     style="width:100%"
                     @load="getDemoBgSize"
                   />
@@ -288,14 +256,15 @@
 
 <script>
 import HelpTips from "../base/HelpTips.vue";
-import { getSetting, setSetting, fileInfoById } from "../../api/api";
-var cookies = require("vue-cookie");
+import { getSetting, setSetting,fileInfoById  } from "../../api/api";
 import elementResizeDetectorMaker from "element-resize-detector";
+import ImageUploader from "../components/ImageUploader.vue";
 
 export default {
   name: "WaterMarkerSetting",
   components: {
     HelpTips,
+    ImageUploader,
   },
   data() {
     return {
@@ -314,12 +283,9 @@ export default {
         minWidth: 0,
         minHeight: 0,
       },
+      fileId: -1,
       waterImg: "",
-      fileId: 0,
-      tipColor: "green",
-      tipText: "",
       uploadAction: "",
-      headers: {},
       wartermarkWidth: 0,
       wartermarkHeight: 0,
       wartermarkBgWidth: 0,
@@ -361,39 +327,10 @@ export default {
       this.wartermarkBgWidth = element.clientWidth;
       this.wartermarkBgHeight = element.clientHeight;
     },
-    beforeWaterImgUpload(file) {
-      const isImage = file.type === "image/jpeg" || file.type === "image/png";
-      const isLt400K = file.size / 1024 / 1024 / 1024 < 400;
-
-      if (!isImage) {
-        this.uploadErrorInfo("上传水印图片图片只能是 JPG/PNG 格式!");
-      }
-      if (!isLt400K) {
-        this.uploadErrorInfo("上传水印图片图片大小不能超过 400KB!");
-      }
-
-      this.headers["authorization"] = cookies.get("authorization");
-
-      return isImage && isLt400K;
-    },
-    uploadSuccessInfo(msg) {
-      this.tipColor = "green";
-      this.tipText = msg;
-    },
-    uploadErrorInfo(msg) {
-      this.tipColor = "red";
-      this.tipText = msg;
-    },
-    uploadWaterImgError() {
-      this.uploadErrorInfo("上传水印图片失败");
-    },
-    uploadWaterImgSuccess(response) {
-      if (response.code === 200) {
-        this.fileId = response.data.fileId;
-        //this.user.WaterImg = response.data.urls[0];
-      }
-      this.uploadSuccessInfo("图片上传成功，水印图片将在保存后生效");
-      this.setting.scale = 1;
+    uploadMarkerImageSuccess(response) {
+      this.fileId = response.fileId;
+      this.waterImg = ""
+      this.setting.scale = 100 / response.data.imageWidth;
     },
     saveSetting() {
       setSetting(
@@ -561,5 +498,6 @@ button {
   position: relative;
   margin-left: auto;
   margin-right: auto;
+  overflow: hidden;
 }
 </style>

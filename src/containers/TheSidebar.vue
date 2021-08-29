@@ -6,11 +6,11 @@
     @update:show="(value) => $store.commit('set', ['sidebarShow', value])"
   >
     <CSidebarBrand class="d-md-down-none" to="/">
-      <img class="c-sidebar-brand-full" :height="35" src="img/logo_white.png" />
+      <img class="c-sidebar-brand-full" :height="35" :src="require('@/assets/image/logo_white.png')" />
       <img
         class="c-sidebar-brand-minimized"
         :height="35"
-        src="img/logo_mini_white.png"
+        :src="require('@/assets/image/logo_mini_white.png')"
       />
     </CSidebarBrand>
 

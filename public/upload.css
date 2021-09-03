@@ -60,12 +60,20 @@
   }
 
   #container {
-    padding-top: 80px;
-    width: calc(100% - 80px);
+    width: calc(100% - 20px);
     max-width: 1320px;
+    height: calc(100% - 100px);
     margin-left: auto;
     margin-right: auto;
-    padding-bottom: 40px;
+    overflow: hidden;
+  }
+
+  #noscrollbar{
+    padding-top: 80px;
+    width: calc(100% + 17px);
+    height: calc(100% - 120px);
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
 
   #wellcomeText {
@@ -153,6 +161,19 @@
     background: #eee;
   }
 
+  .copytip{
+    display: inline-block;
+    position: absolute;
+    left: 4px;
+    top: 5px;
+    z-index: 1;
+    padding: 2px 8px;
+    background: #61cc00bd;
+    color: white;
+    border-radius: 2px;
+    font-size: 12px;
+  }
+
   .upload-progress {
     width: 100%;
     position: absolute;
@@ -211,3 +232,30 @@
   .foot-right {
     text-align: right;
   }
+
+ @media screen and (max-width: 767px) {
+  .foot-left {
+    display: none;
+  }
+
+  .foot-right {
+    display: none;
+  }
+
+  .upload-file-card{
+    width: 100%;
+  }
+
+  #noscrollbar{
+    padding-top: 20px;
+    width: 100%;
+    height: calc(100% - 60px);
+  }
+
+  #upload-area{
+    padding: 20px;
+  }
+
+  #noscrollbar::-webkit-scrollbar { width: 0 !important }
+
+}

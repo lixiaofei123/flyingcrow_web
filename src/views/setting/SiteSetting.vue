@@ -137,6 +137,15 @@
                 label="背景图片"
                 title="背景图片"
               ></ImageUploader>
+              <ImageUploader
+                v-if="setting.bgIsImage"
+                :imageUrl="setting.bgMobileImage"
+                @uploadImageSuccess="uploadBgMobileImageSuccess"
+                :uploadUrl="uploadAction"
+                :maxFilesize="2000"
+                label="手机页面背景图片"
+                title="手机页面背景图片"
+              ></ImageUploader>
               <CRow form class="form-group" v-if="!setting.bgIsImage">
                 <CCol sm="3">
                   背景颜色
@@ -299,6 +308,7 @@ export default {
         allowRegister: false,
         bgColor: "",
         bgImage: "",
+        bgMobileImage: "",
         bgIsImage: false,
         footBarTextColor: "",
         footBarBGColor: "",
@@ -338,6 +348,9 @@ export default {
     },
     uploadBgImageSuccess(resp) {
       this.setting.bgImage = resp.data.urls[0];
+    },
+    uploadBgMobileImageSuccess(resp){
+      this.setting.bgMobileImage = resp.data.urls[0];
     },
     loadAllGroups() {
       groupAll(

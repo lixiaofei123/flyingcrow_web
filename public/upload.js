@@ -10,17 +10,6 @@ let uploadMaxFileSize;
 let allowUploadFileExtension = "";
 let icp;
 
-ajaxGetSiteInfo(
-  (data) => {
-    //先获取站点信息
-    if (data.code === 200) {
-      let siteinfo = data.data.site;
-      resetUI(siteinfo);
-    }
-  },
-  (reason) => {}
-);
-
 window.onload = () => {
   uploadArea = document.getElementById("upload-box");
   uploadFileCards = document.getElementById("upload-files");
@@ -34,12 +23,19 @@ window.onload = () => {
   allowUploadFileExtension = "";
   icp = document.getElementById("icp");
 
+  let siteInfo = getCookie("siteinfo");
+  if (siteInfo) {
+    resetUI(JSON.parse(siteInfo));
+  }
+
   ajaxGetSiteInfo(
     (data) => {
       //先获取站点信息
       if (data.code === 200) {
         let siteinfo = data.data.site;
         let uploadInfo = data.data.upload;
+        setCookie("siteinfo", siteinfo, 365);
+        resetUI(JSON.stringify(siteinfo));
 
         ajaxGetMyInfo(
           (data) => {
@@ -103,13 +99,13 @@ function resetUI(ui) {
   if (bgIsImage && bgImage && !isMobile()) {
     document.getElementById("fullscreen").style.backgroundImage =
       "url(" + bgImage + ")";
-  } else if(bgIsImage && (bgImage || bgMobileImage) && isMobile()){
-    if(bgMobileImage){
+  } else if (bgIsImage && (bgImage || bgMobileImage) && isMobile()) {
+    if (bgMobileImage) {
       document.getElementById("fullscreen").style.backgroundImage =
-      "url(" + bgMobileImage + ")";
-    }else{
+        "url(" + bgMobileImage + ")";
+    } else {
       document.getElementById("fullscreen").style.backgroundImage =
-      "url(" + bgImage + ")";
+        "url(" + bgImage + ")";
     }
   } else if (bgColor) {
     document.getElementById("fullscreen").style.background = bgColor;
@@ -450,6 +446,13 @@ function ajaxUploadFile(
   });
 
   request.send(formData);
+}
+
+function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+  let expires = "expires=" + d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
 function getCookie(cname) {
